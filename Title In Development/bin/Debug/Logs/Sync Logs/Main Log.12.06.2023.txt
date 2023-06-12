@@ -1,0 +1,99 @@
+12/06/2023 21:01:17 - Info - Logging Started
+12/06/2023 21:01:21 - Debug - Internet Connection = true
+12/06/2023 21:01:22 - Debug - Looking for Servers
+12/06/2023 21:01:24 - Info - Server Found - Minecraft 1.7.10
+12/06/2023 21:01:26 - Debug - Loading Server Sync UI
+12/06/2023 21:01:27 - Debug - Variable Population triggered for the MinecraftV1 class.
+12/06/2023 21:01:27 - Debug - Variable Population complete for the MinecraftV1 class.
+12/06/2023 21:01:27 - Debug - Fill Variables triggered for the Minecraft 1.7.10 tab.
+12/06/2023 21:01:38 - Warn - Automatic Sync Check has been started, checking for updates will be triggered every 5 minutes.
+12/06/2023 21:01:38 - Info - Checking for an update to the minecraft 1.7.10 server.
+12/06/2023 21:01:39 - Debug - Checking local last modified against global last modified.
+12/06/2023 21:01:39 - Info - Update check complete, the minecraft 1.7.10 server is up to date.
+12/06/2023 21:01:39 - Debug - Variable Population triggered for the MinecraftV1 class.
+12/06/2023 21:01:39 - Debug - Variable Population complete for the MinecraftV1 class.
+12/06/2023 21:01:39 - Debug - Fill Variables triggered for the Minecraft 1.7.10 tab.
+12/06/2023 21:02:27 - Info - Logging Stopped
+12/06/2023 21:01:17 - Info - Logging Started
+12/06/2023 21:01:21 - Debug - Internet Connection = true
+12/06/2023 21:01:22 - Debug - Looking for Servers
+12/06/2023 21:01:24 - Info - Server Found - Minecraft 1.7.10
+12/06/2023 21:01:26 - Debug - Loading Server Sync UI
+12/06/2023 21:01:27 - Debug - Variable Population triggered for the MinecraftV1 class.
+12/06/2023 21:01:27 - Debug - Variable Population complete for the MinecraftV1 class.
+12/06/2023 21:01:27 - Debug - Fill Variables triggered for the Minecraft 1.7.10 tab.
+12/06/2023 21:01:38 - Warn - Automatic Sync Check has been started, checking for updates will be triggered every 5 minutes.
+12/06/2023 21:01:38 - Info - Checking for an update to the minecraft 1.7.10 server.
+12/06/2023 21:01:39 - Debug - Checking local last modified against global last modified.
+12/06/2023 21:01:39 - Info - Update check complete, the minecraft 1.7.10 server is up to date.
+12/06/2023 21:01:39 - Debug - Variable Population triggered for the MinecraftV1 class.
+12/06/2023 21:01:39 - Debug - Variable Population complete for the MinecraftV1 class.
+12/06/2023 21:01:39 - Debug - Fill Variables triggered for the Minecraft 1.7.10 tab.
+12/06/2023 21:02:27 - Info - Logging Stopped
+12/06/2023 21:02:27 - Info - Logging Stopped
+12/06/2023 09:07:22 PM - Info - Logging Started
+12/06/2023 09:07:26 PM - Debug - Internet Connection = true
+12/06/2023 09:07:28 PM - Debug - Looking for Servers
+12/06/2023 09:07:30 PM - Info - Server Found - Minecraft 1.7.10
+12/06/2023 09:07:31 PM - Debug - Loading Server Sync UI
+12/06/2023 09:07:32 PM - Debug - Variable Population triggered for the MinecraftV1 class.
+12/06/2023 09:07:32 PM - Debug - Variable Population complete for the MinecraftV1 class.
+12/06/2023 09:07:32 PM - Debug - Fill Variables triggered for the Minecraft 1.7.10 tab.
+12/06/2023 09:07:43 PM - Warn - Automatic Sync Check has been started, checking for updates will be triggered every 5 minutes.
+12/06/2023 09:07:43 PM - Info - Checking for an update to the minecraft 1.7.10 server.
+12/06/2023 09:07:44 PM - Debug - Checking local last modified against global last modified.
+12/06/2023 09:07:44 PM - Info - Update check complete, the minecraft 1.7.10 server is up to date.
+12/06/2023 09:07:44 PM - Debug - Variable Population triggered for the MinecraftV1 class.
+12/06/2023 09:07:44 PM - Debug - Variable Population complete for the MinecraftV1 class.
+12/06/2023 09:07:44 PM - Debug - Fill Variables triggered for the Minecraft 1.7.10 tab.
+12/06/2023 09:07:52 PM - Info - Logging Stopped
+12/06/2023 09:07:22 PM - Info - Logging Started
+12/06/2023 09:07:26 PM - Debug - Internet Connection = true
+12/06/2023 09:07:28 PM - Debug - Looking for Servers
+12/06/2023 09:07:30 PM - Info - Server Found - Minecraft 1.7.10
+12/06/2023 09:07:31 PM - Debug - Loading Server Sync UI
+12/06/2023 09:07:32 PM - Debug - Variable Population triggered for the MinecraftV1 class.
+12/06/2023 09:07:32 PM - Debug - Variable Population complete for the MinecraftV1 class.
+12/06/2023 09:07:32 PM - Debug - Fill Variables triggered for the Minecraft 1.7.10 tab.
+12/06/2023 09:07:43 PM - Warn - Automatic Sync Check has been started, checking for updates will be triggered every 5 minutes.
+12/06/2023 09:07:43 PM - Info - Checking for an update to the minecraft 1.7.10 server.
+12/06/2023 09:07:44 PM - Debug - Checking local last modified against global last modified.
+12/06/2023 09:07:44 PM - Info - Update check complete, the minecraft 1.7.10 server is up to date.
+12/06/2023 09:07:44 PM - Debug - Variable Population triggered for the MinecraftV1 class.
+12/06/2023 09:07:44 PM - Debug - Variable Population complete for the MinecraftV1 class.
+12/06/2023 09:07:44 PM - Debug - Fill Variables triggered for the Minecraft 1.7.10 tab.
+12/06/2023 09:07:52 PM - Info - Logging Stopped
+12/06/2023 09:07:52 PM - Info - Logging Stopped
+12/06/2023 21:12:16 - Info - Logging Started
+12/06/2023 21:12:20 - Debug - Internet Connection = true
+12/06/2023 21:12:22 - Debug - Looking for Servers
+12/06/2023 21:12:24 - Info - Server Found - Minecraft 1.7.10
+12/06/2023 21:12:26 - Debug - Loading Server Sync UI
+12/06/2023 21:12:26 - Debug - Variable Population triggered for the MinecraftV1 class.
+12/06/2023 21:12:26 - Debug - Variable Population complete for the MinecraftV1 class.
+12/06/2023 21:12:26 - Debug - Fill Variables triggered for the Minecraft 1.7.10 tab.
+12/06/2023 21:12:37 - Warn - Automatic Sync Check has been started, checking for updates will be triggered every 5 minutes.
+12/06/2023 21:12:37 - Info - Checking for an update to the minecraft 1.7.10 server.
+12/06/2023 21:12:38 - Debug - Checking local last modified against global last modified.
+12/06/2023 21:12:38 - Info - Update check complete, the minecraft 1.7.10 server is up to date.
+12/06/2023 21:12:38 - Debug - Variable Population triggered for the MinecraftV1 class.
+12/06/2023 21:12:38 - Debug - Variable Population complete for the MinecraftV1 class.
+12/06/2023 21:12:38 - Debug - Fill Variables triggered for the Minecraft 1.7.10 tab.
+12/06/2023 21:12:45 - Info - Logging Stopped
+12/06/2023 21:12:16 - Info - Logging Started
+12/06/2023 21:12:20 - Debug - Internet Connection = true
+12/06/2023 21:12:22 - Debug - Looking for Servers
+12/06/2023 21:12:24 - Info - Server Found - Minecraft 1.7.10
+12/06/2023 21:12:26 - Debug - Loading Server Sync UI
+12/06/2023 21:12:26 - Debug - Variable Population triggered for the MinecraftV1 class.
+12/06/2023 21:12:26 - Debug - Variable Population complete for the MinecraftV1 class.
+12/06/2023 21:12:26 - Debug - Fill Variables triggered for the Minecraft 1.7.10 tab.
+12/06/2023 21:12:37 - Warn - Automatic Sync Check has been started, checking for updates will be triggered every 5 minutes.
+12/06/2023 21:12:37 - Info - Checking for an update to the minecraft 1.7.10 server.
+12/06/2023 21:12:38 - Debug - Checking local last modified against global last modified.
+12/06/2023 21:12:38 - Info - Update check complete, the minecraft 1.7.10 server is up to date.
+12/06/2023 21:12:38 - Debug - Variable Population triggered for the MinecraftV1 class.
+12/06/2023 21:12:38 - Debug - Variable Population complete for the MinecraftV1 class.
+12/06/2023 21:12:38 - Debug - Fill Variables triggered for the Minecraft 1.7.10 tab.
+12/06/2023 21:12:45 - Info - Logging Stopped
+12/06/2023 21:12:45 - Info - Logging Stopped

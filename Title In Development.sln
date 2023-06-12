@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33110.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Title In Development", "Title In Development\Title In Development.csproj", "{421265A5-3F13-4A8E-A691-F2816B345509}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Server Sync Installer", "Server Sync Installer\Server Sync Installer.vdproj", "{D21DAA90-E466-435F-815E-7E55427DF34F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{421265A5-3F13-4A8E-A691-F2816B345509}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{421265A5-3F13-4A8E-A691-F2816B345509}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{421265A5-3F13-4A8E-A691-F2816B345509}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{421265A5-3F13-4A8E-A691-F2816B345509}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D21DAA90-E466-435F-815E-7E55427DF34F}.Debug|Any CPU.ActiveCfg = Debug
+		{D21DAA90-E466-435F-815E-7E55427DF34F}.Release|Any CPU.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {20322EDC-A9EF-41BB-8CC2-C552879005F8}
+	EndGlobalSection
+EndGlobal
