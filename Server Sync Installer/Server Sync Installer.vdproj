@@ -27,6 +27,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_2852036E4DF186C28CD4408A9280BBC5"
+        "OwnerKey" = "8:_C8049264A3D14335AE8C2A89C84A299C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_3C40824A77E0E38B75ECC3020E6AAA09"
         "OwnerKey" = "8:_F5F9EB53292CFD04CC685EAFFA3DEEFA"
         "MsmSig" = "8:_UNDEFINED"
@@ -65,6 +71,12 @@
         {
         "MsmKey" = "8:_969A6966ABB657E87612932FC74EE317"
         "OwnerKey" = "8:_F5F9EB53292CFD04CC685EAFFA3DEEFA"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_969A6966ABB657E87612932FC74EE317"
+        "OwnerKey" = "8:_2852036E4DF186C28CD4408A9280BBC5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -113,6 +125,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_05FA1A585DCD6FAA69D1B6B6629EC162"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_2852036E4DF186C28CD4408A9280BBC5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -260,6 +278,37 @@
                     }
                 }
             "SourcePath" = "8:Newtonsoft.Json.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_2DB950591E5F42109954EF267DB4F702"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_2852036E4DF186C28CD4408A9280BBC5"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:System.Net.Http.WebRequest, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+                "ScatterAssemblies"
+                {
+                    "_2852036E4DF186C28CD4408A9280BBC5"
+                    {
+                    "Name" = "8:System.Net.Http.WebRequest.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:System.Net.Http.WebRequest.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_2DB950591E5F42109954EF267DB4F702"
@@ -645,15 +694,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Server Sync Installer"
-        "ProductCode" = "8:{4EEB16C8-6450-44CE-BD1E-31C99BF30064}"
-        "PackageCode" = "8:{2600E9D5-312A-4216-AD52-18D465D9AD58}"
+        "ProductCode" = "8:{82FFFEC1-FCBB-4145-A8D3-B79B638BE20A}"
+        "PackageCode" = "8:{A5BAEDE2-E58A-4066-98F2-8DA7986F2A60}"
         "UpgradeCode" = "8:{1DD65EF5-37E7-46B8-B96D-7DE059BCDB39}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.1.2"
+        "ProductVersion" = "8:1.2.0"
         "Manufacturer" = "8:Hunter Industries"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://github.com/LegendarySpork9/Server-Sync/issues"
