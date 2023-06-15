@@ -694,15 +694,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Server Sync Installer"
-        "ProductCode" = "8:{82FFFEC1-FCBB-4145-A8D3-B79B638BE20A}"
-        "PackageCode" = "8:{A5BAEDE2-E58A-4066-98F2-8DA7986F2A60}"
+        "ProductCode" = "8:{65678D32-3C98-4542-A5E8-775AF309504C}"
+        "PackageCode" = "8:{491B3AEC-9CA5-43A4-8996-DCB2BBC0069A}"
         "UpgradeCode" = "8:{1DD65EF5-37E7-46B8-B96D-7DE059BCDB39}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.2.0"
+        "ProductVersion" = "8:1.2.1"
         "Manufacturer" = "8:Hunter Industries"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://github.com/LegendarySpork9/Server-Sync/issues"
@@ -1216,7 +1216,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_C8049264A3D14335AE8C2A89C84A299C"
             {
-            "SourcePath" = "8:..\\Title In Development\\obj\\Release\\Server Sync 2.0.exe"
+            "SourcePath" = "8:"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_2DB950591E5F42109954EF267DB4F702"

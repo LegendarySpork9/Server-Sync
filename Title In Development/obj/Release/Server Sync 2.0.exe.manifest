@@ -4,7 +4,7 @@
   <description asmv2:iconFile="sync_21734.ico" xmlns="urn:schemas-microsoft-com:asm.v1" />
   <application />
   <entryPoint>
-    <assemblyIdentity name="Server Sync 2.0" version="1.2.0.0" language="neutral" processorArchitecture="msil" />
+    <assemblyIdentity name="Server Sync 2.0" version="1.2.1.0" language="neutral" processorArchitecture="msil" />
     <commandLine file="Server Sync 2.0.exe" parameters="" />
   </entryPoint>
   <trustInfo>
@@ -68,13 +68,13 @@
   </dependency>
   <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Server Sync 2.0.exe" size="104384">
-      <assemblyIdentity name="Server Sync 2.0" version="1.2.0.0" language="neutral" processorArchitecture="msil" />
+      <assemblyIdentity name="Server Sync 2.0" version="1.2.1.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>t2y5KL6TA33J4QhtJaIfFHIFT1WFGWa0nhDCEUSBW9E=</dsig:DigestValue>
+        <dsig:DigestValue>JdHjeCajVM5sj7M2EiRZ2RPJ63VNp0mxmkhG0ZeSqEQ=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

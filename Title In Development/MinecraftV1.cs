@@ -1079,7 +1079,7 @@ namespace Title_In_Development
                     string SessionId = null;
 
                     // Loops through all the chunks.
-                    for (var x = 1; x < NumChunks; x++)
+                    for (var x = 0; x < NumChunks; x++)
                     {
                         // Passes a string to the _SM.L get set and reads the current chunk.
                         _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Debug - Uploading chunk " + x + ".";
