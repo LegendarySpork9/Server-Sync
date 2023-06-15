@@ -9,6 +9,7 @@ using Dropbox.Api.Files;
 using System.Threading;
 using System.Diagnostics;
 using System.IO.Compression;
+using System.Net.Http;
 
 namespace Title_In_Development
 {
@@ -42,6 +43,8 @@ namespace Title_In_Development
         private string Bans;
         private string Mods;
         private string DateLMServer;
+        private string Hamachi;
+        private string SearchDirectory;
         private bool UpdateCheck;
         private bool UploadUpdate;
         private bool DownloadUpdate;
@@ -308,6 +311,43 @@ namespace Title_In_Development
             }
         }
 
+        // Local get used to change the value of the Hamachi variable.
+        public string H
+        {
+            // Obtains the value of the variable.
+            get
+            {
+                // Obtains the value of the variable.
+                return Hamachi;
+            }
+
+            // Changes the value of the variable.
+            set
+            {
+                // Changes the value of the variable.
+                Hamachi = value;
+            }
+        }
+
+        // Local get used to change the value of the SearchDirectory variable.
+        public string SD
+        {
+            // Obtains the value of the variable.
+            get
+            {
+                // Obtains the value of the variable.
+                return SearchDirectory;
+            }
+
+            // Changes the value of the variable.
+            set
+            {
+                // Changes the value of the variable and calls the TraverseDirectory method with the given information.
+                SearchDirectory = value;
+                TraverseDirectory(SearchDirectory, "hamachi-2-ui.exe", SearchDirectory);
+            }
+        }
+
         // Local get set used to change the value of the UpdateCheck variable.
         public bool UC
         {
@@ -386,11 +426,12 @@ namespace Title_In_Development
                 _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Debug - Variable Population triggered for the MinecraftV1 class.";
 
                 // Loads the XML of the given file, sets the FolderPath variable to the value in the given XML node, sets the ServerLocation variable to the value of the given variable, sets the ServerBatFile variable to the given information,
-                // sets the LastRan variable to the value in the given XML node, sets the ServerHosted variable to the value in the given XML node and sets the ServerProp variable to the text of the given file.
+                // sets the Hamachi variable to the given information, sets the LastRan variable to the value in the given XML node, sets the ServerHosted variable to the value in the given XML node and sets the ServerProp variable to the text of the given file.
                 XML.Load(@".\Configuration\Server Config.config");
                 string FolderPath = XML.SelectSingleNode("Servers/Minecraft-1.7.10/Location").Attributes[0].Value;
                 ServerLocation = FolderPath + "\\";
                 ServerBatFile = XML.SelectSingleNode("Servers/Minecraft-1.7.10/Location").Attributes[0].Value + "\\Start.bat";
+                Hamachi = XML.SelectSingleNode("Servers/Minecraft-1.7.10/Location").Attributes[2].Value;
                 LastRan = XML.SelectSingleNode("Servers/Minecraft-1.7.10/LastUpdate").InnerText;
                 string ServerOpenLocal = XML.SelectSingleNode("Servers/Minecraft-1.7.10/ServerOpen").InnerText;
                 string[] ServerProp = File.ReadAllLines(FolderPath + "\\server.properties");
@@ -399,7 +440,7 @@ namespace Title_In_Development
                 if ((LastRan.Contains("AM") == true) || (LastRan.Contains("PM") == true))
                 {
                     // Converts the string to the accepted format.
-                    LastRan = DateTime.ParseExact(LastRan, "dd/MM/yyyy hh:mm:ss tt", null).ToString("dd/MM/yyyy HH:mm");
+                    LastRan = DateTime.ParseExact(LastRan, "dd/MM/yyyy hh:mm:ss tt", null).ToString("dd/MM/yyyy hh:mm tt");
                 }
 
                 // Runs code if condition is met.
@@ -1027,7 +1068,7 @@ namespace Title_In_Development
                 // Reads the file into a stream.
                 using (var Stream = new MemoryStream(FileContent))
                 {
-                    // Calculates the number of required chunks, estimated upload time and passes a string to the _SM.L get set.
+                    // Calculates the number of required chunks, estimates upload time and passes a string to the _SM.L get set.
                     int NumChunks = (int)Math.Ceiling((double)Stream.Length / ChunkSize);
                     int UploadTime = 6 * NumChunks;
                     Time = TimeSpan.FromSeconds(UploadTime);
@@ -1038,7 +1079,7 @@ namespace Title_In_Development
                     string SessionId = null;
 
                     // Loops through all the chunks.
-                    for (var x = 0; x < NumChunks; x++)
+                    for (var x = 1; x < NumChunks; x++)
                     {
                         // Passes a string to the _SM.L get set and reads the current chunk.
                         _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Debug - Uploading chunk " + x + ".";
@@ -1203,21 +1244,72 @@ namespace Title_In_Development
                 // Passes a string to the _SM.L get set.
                 _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Debug - Starting download of update files for the minecraft 1.7.10 server.";
 
-                // Assigns Drobox all the properties of the DropboxClient class, stores the dropbox folder path, stores the name of the update zip file,
-                // Stores its local file path.
-                DropboxClient Dropbox = new DropboxClient("HT2yFlPkZAMAAAAAAAAAAShPNIPtHXWex651zisQZP-X-3v_CdL6iC0t3xysiorO");
-                string Folder = "Games/1.7.10";
-                string FileName = "Title In Development.zip";
+                // Stores the ZIP local file path.
                 string FilePath = ".\\Data\\Title In Development.zip";
 
+                // Chunk size is 10MB.
+                const int ChunkSize = 10 * 1024 * 1024;
+
                 // Downloads the file.
-                using (var response = await Dropbox.Files.DownloadAsync("/" + Folder + "/" + FileName))
+                using (var httpClient = new HttpClient())
                 {
-                    // Moves the file to the specified file path.
-                    using (var fileStream = File.Create(FilePath))
+                    // Gives Request all the properties of the HttpRequestMessage method, adds the authorisation to the request and adds the file to download to the request.
+                    var Request = new HttpRequestMessage(HttpMethod.Post, $"https://content.dropboxapi.com/2/files/download");
+                    Request.Headers.Add("Authorization", $"Bearer HT2yFlPkZAMAAAAAAAAAAShPNIPtHXWex651zisQZP-X-3v_CdL6iC0t3xysiorO");
+                    Request.Headers.Add("Dropbox-API-Arg", $"{{\"path\": \"/Games/1.7.10/Title In Development.zip\"}}");
+
+                    // Reads the file into a stream.
+                    using (var Response = await httpClient.SendAsync(Request, HttpCompletionOption.ResponseHeadersRead))
                     {
-                        // Waits for the download to finish.
-                        (await response.GetContentAsStreamAsync()).CopyTo(fileStream);
+                        // Makes sure that the code only progresses if status 200 is returned.
+                        Response.EnsureSuccessStatusCode();
+
+                        // Gives ContentLength the number of bytes in the file, decalres the TotalBytesRead variable, declares the NumberofChunks variable, estimates upload time and passes a string to the _SM.L get set.
+                        var ContentLength = Response.Content.Headers.ContentLength;
+                        var TotalBytesRead = 0L;
+                        int NumberofChunks = 1;
+                        int UploadTime = 2 * (int)Math.Ceiling((double)((int)(ContentLength / 10485760)));
+                        Time = TimeSpan.FromSeconds(UploadTime);
+                        _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Info - File will be downloaded in " + (int)Math.Ceiling((double)((int)(ContentLength / 10485760)))
+                            + " chunks, this will take approximately " + Time.ToString(@"hh\:mm\:ss") + " seconds.";
+
+                        // Reads the file into a stream.
+                        using (var stream = await Response.Content.ReadAsStreamAsync())
+                        {
+                            // Reads the file into a stream.
+                            using (var fileStream = new FileStream(FilePath, FileMode.Append))
+                            {
+                                // Creates the chunks.
+                                var buffer = new byte[ChunkSize];
+
+                                // Loops until file has been read in full.
+                                while (true)
+                                {
+                                    // Gives BytesRead the number of bytes in the current chunk.
+                                    var BytesRead = await stream.ReadAsync(buffer, 0, ChunkSize);
+
+                                    // Runs code if condition is met.
+                                    if (BytesRead == 0)
+                                    {
+                                        // Exists the loop if there are no more bytes to read.
+                                        break;
+                                    }
+
+                                    // Adds the bytes to the existing file, adds the number of bytes to the total and calculates the chunk number.
+                                    await fileStream.WriteAsync(buffer, 0, BytesRead);
+                                    TotalBytesRead += BytesRead;
+                                    double Chunk = (double)TotalBytesRead / 10485760;
+
+                                    // Runs code if condition is met.
+                                    if (Chunk == (int)Chunk)
+                                    {
+                                        // Passes a string to the _SM.L get set and increases the NumberofChunks.
+                                        _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Debug - Downloaded chunk " + NumberofChunks + ".";
+                                        NumberofChunks += 1;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -1288,6 +1380,69 @@ namespace Title_In_Development
                     File.Create(ErrorLog).Dispose();
                     File.WriteAllText(ErrorLog, ErrorMsg);
                     _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Error - An error occured while trying to download an update for the Minecraft 1.7.10 server, see error log for details.";
+                }
+            }
+        }
+
+        // Runs code when the method is called.
+        private async void TraverseDirectory(string DirectoryPath, string SearchPattern, string TopLevelDirectory)
+        {
+            // Runs code even if error may occur.
+            try
+            {
+                // Stores all the file names of the directory in files if a file is found to match the given information.
+                string[] files = Directory.GetFiles(DirectoryPath, SearchPattern);
+
+                // Runs code for all files in the files variable.
+                foreach (string file in files)
+                {
+                    // Sets the Hamachi variable to the value of the file variable, loads the XML of the given file, sets the DateLM to the value of the XML node, saves the XML of the given fil and passes a string to the _SM.L get set.
+                    Hamachi = file;
+                    XML.Load(@".\Configuration\Server Config.config");
+                    XML.SelectSingleNode("Servers/Minecraft-1.7.10/Location").Attributes[2].Value = Hamachi;
+                    XML.Save(@".\Configuration\Server Config.config");
+                    _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Info - Hamachi exe. location found in " + TopLevelDirectory + ".";
+                }
+
+                // Stores all the subdirectories of the directory in directoryPath.
+                string[] SubDirectories = Directory.GetDirectories(DirectoryPath);
+
+                // Runs code for all subdirectory in the subdirectory variable.
+                foreach (string SubDirectory in SubDirectories)
+                {
+                    // Calls the TraverseDirectory method with the given information.
+                    TraverseDirectory(SubDirectory, SearchPattern, TopLevelDirectory);
+                }
+            }
+
+            // Runs code if an error occurs.
+            catch (UnauthorizedAccessException ex)
+            {
+
+            }
+
+            // Runs code if an error occurs.
+            catch (Exception ex)
+            {
+                // Creates a file path and name for the error log and creates the error message.
+                string ErrorLog = @".\Logs\Error Logs\MV1OpenServer_Error." + DateTime.Now.ToString("dd.MM.yyyy") + ".txt";
+                string ErrorMsg = "The following error occured while trying to open the Minecraft 1.7.10 server:" + Environment.NewLine + ex.ToString();
+
+                // Runs code if condition is met.
+                if (File.Exists(ErrorLog) == true)
+                {
+                    // Writes the error message to the log file and passes a string to the _SM.L get set.
+                    File.WriteAllText(ErrorLog, File.ReadAllText(ErrorLog) + Environment.NewLine + Environment.NewLine + ErrorMsg);
+                    _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Error - An error occured while trying to find the Hamachi exe, see error log for details.";
+                }
+
+                // Runs code if condition is met.
+                else
+                {
+                    // Creates the file, writes the error message to the log file and passes a string to the _SM.L get set.
+                    File.Create(ErrorLog).Dispose();
+                    File.WriteAllText(ErrorLog, ErrorMsg);
+                    _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Error - An error occured while trying to find the Hamachi exe, see error log for details.";
                 }
             }
         }

@@ -18,7 +18,6 @@ namespace Title_In_Development
         Process S;
 
         // Local Class Variables.
-        private string Hamachi = null;
         private string Log;
         private int Counter;
         private bool MV1SyncTimer;
@@ -399,45 +398,44 @@ namespace Title_In_Development
             TCMenuTabs.TabPages.Insert(TCMenuTabs.TabPages.Count, TPServerLog);
 
             // Runs code if condition is met.
-            if (Hamachi == null)
+            if (MV1.H == "")
             {
                 // Passes a string to the L get set.
                 L = Environment.NewLine + DateTime.Now.ToString() + " - Warn - Hamachi exe location unknown.";
-
+            
                 // Sets the parameters for the directory search.
                 string SearchDirectoryC = "C:\\";
                 string SearchDirectoryD = "D:\\";
-                string SearchPattern = "hamachi-2-ui.exe";
 
-                // Passes a string to the L get set and calls the TraverseDirectory method with the given information.
+                // Passes a string to the L get set and calls the SD get set.
                 L = Environment.NewLine + DateTime.Now.ToString() + " - Debug - Searching for Hamachi exe in " + SearchDirectoryC + ".";
                 L = Environment.NewLine + DateTime.Now.ToString() + " - Debug - Searching for Hamachi exe in " + SearchDirectoryD + ".";
-                TraverseDirectory(SearchDirectoryC, SearchPattern, SearchDirectoryC);
-                TraverseDirectory(SearchDirectoryD, SearchPattern, SearchDirectoryD);
-
+                MV1.SD = SearchDirectoryC;
+                MV1.SD = SearchDirectoryD;
+           
                 // Runs code if condition is met.
-                if (Hamachi == null)
+                if (MV1.H == "")
                 {
                     // Passes a string to the L get set.
                     L = Environment.NewLine + DateTime.Now.ToString() + " - Error - Hamachi exe. location not found in " + SearchDirectoryC + " or " + SearchDirectoryD + ".";
                 }
-
+            
                 // Runs code if condition is met.
-                else if (Hamachi.Contains(SearchDirectoryC) == true)
+                else if (MV1.H.Contains(SearchDirectoryC) == true)
                 {
                     // Passes a string to the L get set.
                     L = Environment.NewLine + DateTime.Now.ToString() + " - Info - Hamachi exe. location not found in " + SearchDirectoryD + ".";
                 }
-
+            
                 // Runs code if condition is met.
                 else
                 {
                     // Passes a string to the L get set.
                     L = Environment.NewLine + DateTime.Now.ToString() + " - Info - Hamachi exe. location not found in " + SearchDirectoryC + ".";
                 }
-
+            
                 // Starts Hamachi and the server bat file.
-                H.StartInfo.FileName = Hamachi;
+                H.StartInfo.FileName = MV1.H;
                 H.Start();
                 S.StartInfo.FileName = MV1.SB;
                 S.StartInfo.WorkingDirectory = MV1.SL;
@@ -445,11 +443,11 @@ namespace Title_In_Development
                 S.BeginOutputReadLine();
             }
 
-            // Runs code if condition is met.
+                // Runs code if condition is met.
             else
             {
                 // Starts Hamachi and the server bat file.
-                H.StartInfo.FileName = Hamachi;
+                H.StartInfo.FileName = MV1.H;
                 H.Start();
                 S.StartInfo.FileName = MV1.SB;
                 S.StartInfo.WorkingDirectory = MV1.SL;
@@ -546,65 +544,7 @@ namespace Title_In_Development
             S.StandardInput.Flush();
         }
 
-        // Runs code when the method is called.
-        private async void TraverseDirectory(string DirectoryPath, string SearchPattern, string TopLevelDirectory)
-        {
-            // Runs code even if error may occur.
-            try
-            {
-                // Stores all the file names of the directory in files if a file is found to match the given information.
-                string[] files = Directory.GetFiles(DirectoryPath, SearchPattern);
-
-                // Runs code for all files in the files variable.
-                foreach (string file in files)
-                {
-                    // Sets the Hamachi variable to the value of the file variable and passes a string to the L get set.
-                    Hamachi = file;
-                    L = Environment.NewLine + DateTime.Now.ToString() + " - Info - Hamachi exe. location found in " + TopLevelDirectory + ".";
-                }
-
-                // Stores all the subdirectories of the directory in directoryPath.
-                string[] SubDirectories = Directory.GetDirectories(DirectoryPath);
-
-                // Runs code for all subdirectory in the subdirectory variable.
-                foreach (string SubDirectory in SubDirectories)
-                {
-                    // Calls the TraverseDirectory method with the given information.
-                    TraverseDirectory(SubDirectory, SearchPattern, TopLevelDirectory);
-                }
-            }
-
-            // Runs code if an error occurs.
-            catch (UnauthorizedAccessException ex)
-            {
-
-            }
-
-            // Runs code if an error occurs.
-            catch (Exception ex)
-            {
-                // Creates a file path and name for the error log and creates the error message.
-                string ErrorLog = @".\Logs\Error Logs\MV1OpenServer_Error." + DateTime.Now.ToString("dd.MM.yyyy") + ".txt";
-                string ErrorMsg = "The following error occured while trying to open the Minecraft 1.7.10 server:" + Environment.NewLine + ex.ToString();
-
-                // Runs code if condition is met.
-                if (File.Exists(ErrorLog) == true)
-                {
-                    // Writes the error message to the log file and passes a string to the L get set.
-                    File.WriteAllText(ErrorLog, File.ReadAllText(ErrorLog) + Environment.NewLine + Environment.NewLine + ErrorMsg);
-                    L = Environment.NewLine + DateTime.Now.ToString() + " - Error - An error occured while trying to find the Hamachi exe, see error log for details.";
-                }
-
-                // Runs code if condition is met.
-                else
-                {
-                    // Creates the file, writes the error message to the log file and passes a string to the L get set.
-                    File.Create(ErrorLog).Dispose();
-                    File.WriteAllText(ErrorLog, ErrorMsg);
-                    L = Environment.NewLine + DateTime.Now.ToString() + " - Error - An error occured while trying to find the Hamachi exe, see error log for details.";
-                }
-            }
-        }
+        
 
         // Runs code when the program closes.
         private void Exit(object sender, FormClosingEventArgs e)
