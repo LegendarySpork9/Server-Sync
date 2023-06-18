@@ -208,10 +208,14 @@ namespace Title_In_Development
                 // Passes a string to the L get set.
                 L = Environment.NewLine + DateTime.Now.ToString() + " - Debug - Fill Variables triggered for the Minecraft 1.7.10 tab.";
 
-                // Enables the buttons.
-                BTMV1Check.Enabled = true;
-                BTMV1Sync.Enabled = true;
-                BTMV1Start.Enabled = true;
+                // Runs code if condition met.
+                if (MV1.SS != "Running")
+                {
+                    // Enables the buttons.
+                    BTMV1Check.Enabled = true;
+                    BTMV1Sync.Enabled = true;
+                    BTMV1Start.Enabled = true;
+                }
 
                 // Fills out the menus containers with the given information.
                 PBMV1Icon.Image = new Bitmap(".\\Data\\1.7.10 Forge Logo.jpeg");
