@@ -10,6 +10,7 @@ using System.Threading;
 using System.Diagnostics;
 using System.IO.Compression;
 using System.Net.Http;
+using System.Windows.Forms;
 
 namespace Title_In_Development
 {
@@ -19,6 +20,8 @@ namespace Title_In_Development
         XmlDocument XML = new XmlDocument();
         private Sync_Menu _SM;
         TimeSpan Time;
+        ProcessStartInfo PSI;
+        Process DD;
 
         // Local Class Variables.
         private bool Variables;
@@ -808,8 +811,9 @@ namespace Title_In_Development
                     // Deletes the GCF file.
                     File.Delete(FilePath);
 
-                    // Passes a string to the _SM.L get set.
+                    // Passes a string to the _SM.L get set and calls the FillVariables method.
                     _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Debug - Uploading of altered Global Server Config file is complete.";
+                    FillVariables();
                 }
 
                 // Runs code if condition is met.
@@ -856,8 +860,9 @@ namespace Title_In_Development
                     // Deletes the GCF file.
                     File.Delete(FilePath);
 
-                    // Passes a string to the _SM.L get set.
+                    // Passes a string to the _SM.L get set and calls the FillVariables method.
                     _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Debug - Uploading of altered Global Server Config file is complete.";
+                    FillVariables();
                 }
             }
 
@@ -949,6 +954,8 @@ namespace Title_In_Development
                     // Runs code if condition met.
                     if (DateLM != DateLMServer)
                     {
+                        //MessageBox.Show("DateLM: " + DateLM + ", DateLMServer: " + DateLMServer);
+
                         // Calls the Download method.
                         Download();
 
@@ -973,6 +980,8 @@ namespace Title_In_Development
                         // Runs code if condition met.
                         if (DateLM != SLM)
                         {
+                            //MessageBox.Show("DateLM: " + DateLM + ", SLM: " + SLM);
+
                             // Calls the Upload method.
                             Upload();
 
@@ -1082,7 +1091,7 @@ namespace Title_In_Development
                     for (var x = 0; x < NumChunks; x++)
                     {
                         // Passes a string to the _SM.L get set and reads the current chunk.
-                        _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Debug - Uploading chunk " + x + ".";
+                        _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Debug - Uploading chunk " + (x + 1) + ".";
                         var ByteRead = Stream.Read(Buffer, 0, ChunkSize);
 
                         // Reads the chunk into a stream.
@@ -1268,7 +1277,7 @@ namespace Title_In_Development
                         var ContentLength = Response.Content.Headers.ContentLength;
                         var TotalBytesRead = 0L;
                         int NumberofChunks = 1;
-                        int UploadTime = 2 * (int)Math.Ceiling((double)((int)(ContentLength / 10485760)));
+                        int UploadTime = 6 * (int)Math.Ceiling((double)((int)(ContentLength / 10485760)));
                         Time = TimeSpan.FromSeconds(UploadTime);
                         _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Info - File will be downloaded in " + (int)Math.Ceiling((double)((int)(ContentLength / 10485760)))
                             + " chunks, this will take approximately " + Time.ToString(@"hh\:mm\:ss") + " seconds.";
@@ -1319,8 +1328,18 @@ namespace Title_In_Development
                 // Passes a string to the _SM.L get set.
                 _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Debug - Extracting the update files for the minecraft 1.7.10 server.";
 
-                // Deletes all files and folders in the save folder.
-                Process.Start("cmd.exe", string.Format("/C RD /S /Q \"{0}", ServerLocation));
+                // Passes the methods of the ProcessStartInfo class with the given information.
+                PSI = new ProcessStartInfo
+                {
+                    FileName = "cmd.exe",
+                    Arguments = string.Format("/C RD /S /Q \"{0}", ServerLocation),
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
+
+                // Passes the methods of the Process class with the start info of the given information and deletes all files and folders in the save folder.
+                DD = new Process { StartInfo = PSI };
+                DD.Start();
 
                 // Pauses the process.
                 Thread.Sleep(10000);
