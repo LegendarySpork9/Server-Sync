@@ -6,6 +6,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Title_In_Development
 {
@@ -392,13 +393,14 @@ namespace Title_In_Development
         // Runs code if button is clicked.
         private async void MV1StartClick(object sender, EventArgs e)
         {
-            // Passes a string to the L get set, disables the button, enables the stop button, changes the LBServerStatus value, calls the SS get set, sets it to the given string and shows the TPServerLog tab.
+            // Passes a string to the L get set, disables the button, enables the stop button, changes the LBServerStatus value, calls the SS get set, sets it to the given string, empties the TBServerConsole and shows the TPServerLog tab.
             L = Environment.NewLine + DateTime.Now.ToString() + " - Info - Starting Minecraft 1.7.10 Server and required applications.";
             BTMV1Start.Enabled = false;
             BTMV1Sync.Enabled = false;
             BTMV1Stop.Enabled = true;
             LBMV1ServerStatus.Text = "Server Status: Running";
             MV1.SS = "Running";
+            TBServerConsole.Text = null;
             TCMenuTabs.TabPages.Insert(TCMenuTabs.TabPages.Count, TPServerLog);
 
             // Runs code if condition is met.
@@ -463,19 +465,27 @@ namespace Title_In_Development
         // Runs code if button is clicked.
         private async void MV1StopClick(object sender, EventArgs e)
         {
-            // Passes a string to the L get set, enables the button, disables the stop button, changes the LBServerStatus value, calls the SS get set, sets it to the given string and hides the TPServerLog tab.
+            // Passes a string to the L get set.
             L = Environment.NewLine + DateTime.Now.ToString() + " - Info - Stopping Minecraft 1.7.10 Server and required applications.";
+
+            // Stops the server and closes Hamachi.
+            S.StandardInput.WriteLine("stop");
+            S.StandardInput.Flush();
+            H.Kill();
+
+            // Pauses the task for 10 seconds, then simulates a key press and then closes the server.
+            await Task.Delay(10000);
+            S.StandardInput.WriteLine();
+            S.CancelOutputRead();
+            S.Kill();
+
+            // Enables the button, disables the stop button, changes the LBServerStatus value, calls the SS get set, sets it to the given string and hides the TPServerLog tab
             BTMV1Start.Enabled = true;
             BTMV1Sync.Enabled = true;
             BTMV1Stop.Enabled = false;
             LBMV1ServerStatus.Text = "Server Status: Stopped";
             MV1.SS = "Stopped";
             TCMenuTabs.TabPages.Remove(TPServerLog);
-
-            // Stops the server and closes Hamachi.
-            S.StandardInput.WriteLine("stop");
-            S.StandardInput.Flush();
-            H.Kill();
         }
 
         // Runs code if button is clicked.
