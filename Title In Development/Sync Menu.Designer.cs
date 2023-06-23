@@ -65,6 +65,7 @@
             this.TBServerConsole = new System.Windows.Forms.TextBox();
             this.TMMV1Sync = new System.Windows.Forms.Timer(this.components);
             this.TMMV1Status = new System.Windows.Forms.Timer(this.components);
+            this.TMRetry = new System.Windows.Forms.Timer(this.components);
             this.TCMenuTabs.SuspendLayout();
             this.TPMinecraftV1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PBMV1Icon)).BeginInit();
@@ -83,6 +84,7 @@
             this.TCMenuTabs.SelectedIndex = 0;
             this.TCMenuTabs.Size = new System.Drawing.Size(504, 481);
             this.TCMenuTabs.TabIndex = 0;
+            this.TCMenuTabs.SelectedIndexChanged += new System.EventHandler(this.ChangeOfTab);
             // 
             // TPMinecraftV1
             // 
@@ -453,6 +455,11 @@
             // 
             this.TMMV1Status.Tick += new System.EventHandler(this.MV1StatusTimePassed);
             // 
+            // TMRetry
+            // 
+            this.TMRetry.Interval = 30000;
+            this.TMRetry.Tick += new System.EventHandler(this.RetryTimePassed);
+            // 
             // Sync_Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -516,5 +523,6 @@
         private System.Windows.Forms.TextBox TBServerConsole;
         private System.Windows.Forms.Timer TMMV1Sync;
         private System.Windows.Forms.Timer TMMV1Status;
+        private System.Windows.Forms.Timer TMRetry;
     }
 }

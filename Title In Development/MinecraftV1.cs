@@ -52,6 +52,7 @@ namespace Title_In_Development
         private bool UploadUpdate;
         private bool DownloadUpdate;
         private bool ServerRunning;
+        private int RetryNumber = 0;
 
         // Handles the Sync_Menu.
         public MinecraftV1(Sync_Menu SM)
@@ -665,7 +666,7 @@ namespace Title_In_Development
                 // Assigns Drobox all the properties of the DropboxClient class, stores the dropbox folder path, stores the name of the update zip file,
                 // Stores its local file path.
                 DropboxClient Dropbox = new DropboxClient("HT2yFlPkZAMAAAAAAAAAAShPNIPtHXWex651zisQZP-X-3v_CdL6iC0t3xysiorO");
-                string Folder = "Games/1.7.10";
+                string Folder = "Games";
                 string FileName = "Global Server Config.config";
                 string FilePath = ".\\Configuration\\Global Server Config.config";
 
@@ -745,7 +746,7 @@ namespace Title_In_Development
                 // Runs code if condition is met.
                 if (File.Exists(ErrorLog) == true)
                 {
-                    // Writes the error message to the log file, changes the value of the InternetConnected variable and passes a string to the _SM.L get set.
+                    // Writes the error message to the log file and passes a string to the _SM.L get set.
                     File.WriteAllText(ErrorLog, File.ReadAllText(ErrorLog) + Environment.NewLine + Environment.NewLine + ErrorMsg);
                     _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Error - An error occured while trying to fill the variables for the Minecraft 1.7.10 tab, see error log for details.";
                 }
@@ -753,7 +754,7 @@ namespace Title_In_Development
                 // Runs code if condition is met.
                 else
                 {
-                    // Creates the file, writes the error message to the log file, changes the value of the InternetConnected variable and passes a string to the _SM.L get set.
+                    // Creates the file, writes the error message to the log file and passes a string to the _SM.L get set.
                     File.Create(ErrorLog).Dispose();
                     File.WriteAllText(ErrorLog, ErrorMsg);
                     _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Error - An error occured while trying to fill the variables for the Minecraft 1.7.10 tab, see error log for details.";
@@ -778,7 +779,7 @@ namespace Title_In_Development
                     // Assigns Drobox all the properties of the DropboxClient class, stores the dropbox folder path, stores the name of the update zip file,
                     // Stores its local file path.
                     DropboxClient Dropbox = new DropboxClient("HT2yFlPkZAMAAAAAAAAAAShPNIPtHXWex651zisQZP-X-3v_CdL6iC0t3xysiorO");
-                    string Folder = "Games/1.7.10";
+                    string Folder = "Games";
                     string FileName = "Global Server Config.config";
                     string FilePath = ".\\Configuration\\Global Server Config.config";
 
@@ -827,7 +828,7 @@ namespace Title_In_Development
                     // Assigns Drobox all the properties of the DropboxClient class, stores the dropbox folder path, stores the name of the update zip file,
                     // Stores its local file path.
                     DropboxClient Dropbox = new DropboxClient("HT2yFlPkZAMAAAAAAAAAAShPNIPtHXWex651zisQZP-X-3v_CdL6iC0t3xysiorO");
-                    string Folder = "Games/1.7.10";
+                    string Folder = "Games";
                     string FileName = "Global Server Config.config";
                     string FilePath = ".\\Configuration\\Global Server Config.config";
 
@@ -876,7 +877,7 @@ namespace Title_In_Development
                 // Runs code if condition is met.
                 if (File.Exists(ErrorLog) == true)
                 {
-                    // Writes the error message to the log file, changes the value of the InternetConnected variable and passes a string to the _SM.L get set.
+                    // Writes the error message to the log file and passes a string to the _SM.L get set.
                     File.WriteAllText(ErrorLog, File.ReadAllText(ErrorLog) + Environment.NewLine + Environment.NewLine + ErrorMsg);
                     _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Error - An error occured while trying to update the server status for the Minecraft 1.7.10 tab, see error log for details.";
                 }
@@ -884,7 +885,7 @@ namespace Title_In_Development
                 // Runs code if condition is met.
                 else
                 {
-                    // Creates the file, writes the error message to the log file, changes the value of the InternetConnected variable and passes a string to the _SM.L get set.
+                    // Creates the file, writes the error message to the log file and passes a string to the _SM.L get set.
                     File.Create(ErrorLog).Dispose();
                     File.WriteAllText(ErrorLog, ErrorMsg);
                     _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Error - An error occured while trying to update the server status for the Minecraft 1.7.10 tab, see error log for details.";
@@ -911,7 +912,7 @@ namespace Title_In_Development
                     // Assigns Drobox all the properties of the DropboxClient class, stores the dropbox folder path, stores the name of the update zip file,
                     // Stores its local file path.
                     DropboxClient Dropbox = new DropboxClient("HT2yFlPkZAMAAAAAAAAAAShPNIPtHXWex651zisQZP-X-3v_CdL6iC0t3xysiorO");
-                    string Folder = "Games/1.7.10";
+                    string Folder = "Games";
                     string FileName = "Global Server Config.config";
                     string FilePath = ".\\Configuration\\Global Server Config.config";
 
@@ -954,7 +955,7 @@ namespace Title_In_Development
                     // Runs code if condition met.
                     if (DateLM != DateLMServer)
                     {
-                        //MessageBox.Show("DateLM: " + DateLM + ", DateLMServer: " + DateLMServer);
+                        MessageBox.Show("DateLM: " + DateLM + ", DateLMServer: " + DateLMServer);
 
                         // Calls the Download method.
                         Download();
@@ -980,7 +981,7 @@ namespace Title_In_Development
                         // Runs code if condition met.
                         if (DateLM != SLM)
                         {
-                            //MessageBox.Show("DateLM: " + DateLM + ", SLM: " + SLM);
+                            MessageBox.Show("DateLM: " + DateLM + ", SLM: " + SLM);
 
                             // Calls the Upload method.
                             Upload();
@@ -1029,7 +1030,7 @@ namespace Title_In_Development
                 // Runs code if condition is met.
                 if (File.Exists(ErrorLog) == true)
                 {
-                    // Writes the error message to the log file, changes the value of the InternetConnected variable and passes a string to the _SM.L get set.
+                    // Writes the error message to the log file and passes a string to the _SM.L get set.
                     File.WriteAllText(ErrorLog, File.ReadAllText(ErrorLog) + Environment.NewLine + Environment.NewLine + ErrorMsg);
                     _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Error - An error occured while trying to check if an update is required for the Minecraft 1.7.10 tab, see error log for details.";
                 }
@@ -1037,7 +1038,7 @@ namespace Title_In_Development
                 // Runs code if condition is met.
                 else
                 {
-                    // Creates the file, writes the error message to the log file, changes the value of the InternetConnected variable and passes a string to the _SM.L get set.
+                    // Creates the file, writes the error message to the log file and passes a string to the _SM.L get set.
                     File.Create(ErrorLog).Dispose();
                     File.WriteAllText(ErrorLog, ErrorMsg);
                     _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Error - An error occured while trying to check if an update is required for the Minecraft 1.7.10 tab, see error log for details.";
@@ -1054,6 +1055,9 @@ namespace Title_In_Development
                 // Stops the timer.
                 _SM.MV1ST = false;
 
+                // Deletes the ZIP file if it already exists to avoid error.
+                File.Delete(".\\Data\\Minecraft 1.7.10.zip");
+
                 // Passes a string to the _SM.L get set.
                 _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Info - Local Minecraft 1.7.10 server has been updated or a manual sync has been triggered, beginning upload.";
 
@@ -1061,18 +1065,18 @@ namespace Title_In_Development
                 _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Debug - Starting upload of Minecraft 1.7.10 server.";
 
                 // Zips save files into data folder.
-                ZipFile.CreateFromDirectory(ServerLocation, ".\\Data\\Title In Development.zip");
+                ZipFile.CreateFromDirectory(ServerLocation, ".\\Data\\Minecraft 1.7.10.zip");
 
                 // Assigns Drobox all the properties of the DropboxClient class, stores the dropbox folder path, stores the name of the update zip file.
                 DropboxClient Dropbox = new DropboxClient("HT2yFlPkZAMAAAAAAAAAAShPNIPtHXWex651zisQZP-X-3v_CdL6iC0t3xysiorO");
-                string Folder = "Games/1.7.10";
-                string FileName = "Title In Development.zip";
+                string Folder = "Games";
+                string FileName = "Minecraft 1.7.10.zip";
 
                 // Chunk size is 10MB.
                 const int ChunkSize = 10 * 1024 * 1024;
 
                 // Loads the file.
-                var FileContent = File.ReadAllBytes(".\\Data\\Title In Development.zip");
+                var FileContent = File.ReadAllBytes(".\\Data\\Minecraft 1.7.10.zip");
 
                 // Reads the file into a stream.
                 using (var Stream = new MemoryStream(FileContent))
@@ -1130,7 +1134,7 @@ namespace Title_In_Development
                 }
 
                 // Deletes the zip file.
-                File.Delete(".\\Data\\Title In Development.zip");
+                File.Delete(".\\Data\\Minecraft 1.7.10.zip");
 
                 // Sets the variable to the time of the last modified of the given file.
                 string LastWriteTime = File.GetLastWriteTime(Path.Combine(ServerLocation, "world\\level.dat")).ToString();
@@ -1160,7 +1164,7 @@ namespace Title_In_Development
                 else
                 {
                     // Stores the dropbox folder path and stores the name of the update file,
-                    Folder = "Games/1.7.10";
+                    Folder = "Games";
                     FileName = "Global Server Config.config";
 
                     // Downloads the file.
@@ -1205,11 +1209,12 @@ namespace Title_In_Development
                 // Passes a string to the _SM.L get set.
                 _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Info - Upload for the minecraft 1.7.10 server is complete.";
 
-                // Sets the value of the SyncStatus Variable to the given string, stops the timer, sets the UploadUpdate variable to false and calls the FillVariables method.
+                // Sets the value of the SyncStatus Variable to the given string, stops the timer, sets the UploadUpdate variable to false, calls the FillVariables method and resets the RetryNumber Variable.
                 SyncStatus = "Up To Date";
                 _SM.MV1SST = false;
                 UploadUpdate = false;
                 FillVariables();
+                RetryNumber = 0;
             }
 
             // Runs code if an error occurs.
@@ -1222,18 +1227,60 @@ namespace Title_In_Development
                 // Runs code if condition is met.
                 if (File.Exists(ErrorLog) == true)
                 {
-                    // Writes the error message to the log file, changes the value of the InternetConnected variable and passes a string to the _SM.L get set.
+                    // Writes the error message to the log file and passes a string to the _SM.L get set.
                     File.WriteAllText(ErrorLog, File.ReadAllText(ErrorLog) + Environment.NewLine + Environment.NewLine + ErrorMsg);
                     _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Error - An error occured while trying to upload an update for the Minecraft 1.7.10 server, see error log for details.";
+
+                    // Runs code if condition is met.
+                    if (RetryNumber < 3)
+                    {
+                        // Passes a string to the _SM.L get set, sets the UploadUpdate variable to false, increases RetryNumber by 1 and starts the timer.
+                        _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Warn - Retry timer has been started, Upload will be attempted again in 30 seconds.";
+                        UploadUpdate = false;
+                        RetryNumber += 1;
+                        _SM.RT = true;
+                    }
+
+                    // Runs code if condition is met.
+                    else
+                    {
+                        // Sets the value of the SyncStatus Variable to the given string, stops the timer, sets the UploadUpdate variable to false, calls the FillVariables method and Stops the timer.
+                        SyncStatus = "Failed";
+                        _SM.MV1SST = false;
+                        UploadUpdate = false;
+                        FillVariables();
+                        _SM.RT = false;
+                    }
                 }
 
                 // Runs code if condition is met.
                 else
                 {
-                    // Creates the file, writes the error message to the log file, changes the value of the InternetConnected variable and passes a string to the _SM.L get set.
+                    // Creates the file, writes the error message to the log file and passes a string to the _SM.L get set.
                     File.Create(ErrorLog).Dispose();
                     File.WriteAllText(ErrorLog, ErrorMsg);
                     _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Error - An error occured while trying to upload an update for the Minecraft 1.7.10 server, see error log for details.";
+
+                    // Runs code if condition is met.
+                    if (RetryNumber < 3)
+                    {
+                        // Passes a string to the _SM.L get set, sets the UploadUpdate variable to false, increases RetryNumber by 1 and starts the timer.
+                        _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Warn - Retry timer has been started, Upload will be attempted again in 30 seconds.";
+                        UploadUpdate = false;
+                        RetryNumber += 1;
+                        _SM.RT = true;
+                    }
+
+                    // Runs code if condition is met.
+                    else
+                    {
+                        // Sets the value of the SyncStatus Variable to the given string, stops the timer, sets the UploadUpdate variable to false, calls the FillVariables method and Stops the timer.
+                        SyncStatus = "Failed";
+                        _SM.MV1SST = false;
+                        UploadUpdate = false;
+                        FillVariables();
+                        _SM.RT = false;
+                    }
                 }
             }
         }
@@ -1247,6 +1294,9 @@ namespace Title_In_Development
                 // Stops the timer.
                 _SM.MV1ST = false;
 
+                // Deletes the ZIP file if it already exists to avoid error.
+                File.Delete(".\\Data\\Minecraft 1.7.10.zip");
+
                 // Passes a string to the _SM.L get set.
                 _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Info - Update for the minecraft 1.7.10 server is required, beginning update.";
 
@@ -1254,7 +1304,7 @@ namespace Title_In_Development
                 _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Debug - Starting download of update files for the minecraft 1.7.10 server.";
 
                 // Stores the ZIP local file path.
-                string FilePath = ".\\Data\\Title In Development.zip";
+                string FilePath = ".\\Data\\Minecraft 1.7.10.zip";
 
                 // Chunk size is 10MB.
                 const int ChunkSize = 10 * 1024 * 1024;
@@ -1265,7 +1315,7 @@ namespace Title_In_Development
                     // Gives Request all the properties of the HttpRequestMessage method, adds the authorisation to the request and adds the file to download to the request.
                     var Request = new HttpRequestMessage(HttpMethod.Post, $"https://content.dropboxapi.com/2/files/download");
                     Request.Headers.Add("Authorization", $"Bearer HT2yFlPkZAMAAAAAAAAAAShPNIPtHXWex651zisQZP-X-3v_CdL6iC0t3xysiorO");
-                    Request.Headers.Add("Dropbox-API-Arg", $"{{\"path\": \"/Games/1.7.10/Title In Development.zip\"}}");
+                    Request.Headers.Add("Dropbox-API-Arg", $"{{\"path\": \"/Games/Minecraft 1.7.10.zip\"}}");
 
                     // Reads the file into a stream.
                     using (var Response = await httpClient.SendAsync(Request, HttpCompletionOption.ResponseHeadersRead))
@@ -1350,7 +1400,7 @@ namespace Title_In_Development
                 // Extracts the ZIP file to the given path, deletes the zip file and moves the extracted files to the program's directory.
                 ZipFile.ExtractToDirectory(FilePath, ServerLocation);
                 File.Delete(FilePath);
-                FilePath = FilePath.Replace("Title In Development.zip", "");
+                FilePath = FilePath.Replace("Minecraft 1.7.10.zip", "");
 
                 // Loads the XML of the given file, sets the ServerProp to the value of the XML node and moves the server properties file to the server folder.
                 XML.Load(@".\Configuration\Server Config.config");
@@ -1370,11 +1420,12 @@ namespace Title_In_Development
                 // Passes a string to the _SM.L get set.
                 _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Info - Update for the minecraft 1.7.10 server is complete.";
 
-                // Sets the value of the SyncStatus Variable to the given string, stops the timer, sets the DownloadUpdate variable to false and calls the FillVariables method.
+                // Sets the value of the SyncStatus Variable to the given string, stops the timer, sets the DownloadUpdate variable to false, calls the FillVariables method and resets the RetryNumber Variable.
                 SyncStatus = "Up To Date";
                 _SM.MV1SST = false;
                 DownloadUpdate = false;
                 FillVariables();
+                RetryNumber = 0;
             }
 
             // Runs code if an error occurs.
@@ -1387,18 +1438,60 @@ namespace Title_In_Development
                 // Runs code if condition is met.
                 if (File.Exists(ErrorLog) == true)
                 {
-                    // Writes the error message to the log file, changes the value of the InternetConnected variable and passes a string to the _SM.L get set.
+                    // Writes the error message to the log file and passes a string to the _SM.L get set.
                     File.WriteAllText(ErrorLog, File.ReadAllText(ErrorLog) + Environment.NewLine + Environment.NewLine + ErrorMsg);
                     _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Error - An error occured while trying to download an update for the Minecraft 1.7.10 server, see error log for details.";
+
+                    // Runs code if condition is met.
+                    if (RetryNumber < 3)
+                    {
+                        // Passes a string to the _SM.L get set, sets the DownloadUpdate variable to false, increases RetryNumber by 1 and starts the timer.
+                        _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Warn - Retry timer has been started, Download will be attempted again in 30 seconds.";
+                        DownloadUpdate = false;
+                        RetryNumber += 1;
+                        _SM.RT = true;
+                    }
+
+                    // Runs code if condition is met.
+                    else
+                    {
+                        // Sets the value of the SyncStatus Variable to the given string, stops the timer, sets the UploadUpdate variable to false, calls the FillVariables method and stops the timer.
+                        SyncStatus = "Failed";
+                        _SM.MV1SST = false;
+                        UploadUpdate = false;
+                        FillVariables();
+                        _SM.RT = false;
+                    }
                 }
 
                 // Runs code if condition is met.
                 else
                 {
-                    // Creates the file, writes the error message to the log file, changes the value of the InternetConnected variable and passes a string to the _SM.L get set.
+                    // Creates the file, writes the error message to the log file and passes a string to the _SM.L get set.
                     File.Create(ErrorLog).Dispose();
                     File.WriteAllText(ErrorLog, ErrorMsg);
                     _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Error - An error occured while trying to download an update for the Minecraft 1.7.10 server, see error log for details.";
+                    
+                    // Runs code if condition is met.
+                    if (RetryNumber < 3)
+                    {
+                        // Passes a string to the _SM.L get set, sets the DownloadUpdate variable to false, increases RetryNumber by 1 and starts the timer.
+                        _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Warn - Retry timer has been started, Download will be attempted again in 30 seconds.";
+                        DownloadUpdate = false;
+                        RetryNumber += 1;
+                        _SM.RT = true;
+                    }
+
+                    // Runs code if condition is met.
+                    else
+                    {
+                        // Sets the value of the SyncStatus Variable to the given string, stops the timer, sets the UploadUpdate variable to false, calls the FillVariables method and Stops the timer.
+                        SyncStatus = "Failed";
+                        _SM.MV1SST = false;
+                        UploadUpdate = false;
+                        FillVariables();
+                        _SM.RT = false;
+                    }
                 }
             }
         }
