@@ -7,6 +7,7 @@ using System.Net;
 using System.Windows.Forms;
 using System.IO;
 using System.Xml;
+using System.Reflection;
 
 namespace Title_In_Development
 {
@@ -45,6 +46,7 @@ namespace Title_In_Development
 
             // Passes the given string to the SM.L get set.
             SM.L = DateTime.Now.ToString() + " - Info - " + "Logging Started";
+            SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Info - " + "Running Version: " + Assembly.GetEntryAssembly().GetName().Version;
         }
 
         // Runs code when the form loads.

@@ -26,6 +26,7 @@ namespace Title_In_Development
         private bool MV1FillVariables;
         private bool FillMV1TF;
         private bool AutoSync;
+        private bool RetryTimer;
 
         // Local get set used to change the value of the Log variable.
         public string L
@@ -109,6 +110,38 @@ namespace Title_In_Development
                     // Stops the timer and resets the LBMV1SyncStatus text.
                     TMMV1Status.Stop();
                     LBMV1SyncStatus.Text = "Status: " + MV1.LBSS;
+                }
+            }
+        }
+
+        // Local get set used to change the value of the RetryTimer variable.
+        public bool RT
+        {
+            // Obtains the value of the variable.
+            get
+            {
+                // Obtains the value of the variable.
+                return RetryTimer;
+            }
+
+            // Changes the value of the variable.
+            set
+            {
+                // Changes the value of the variable.
+                RetryTimer = value;
+
+                //Runs code if condition is met.
+                if (RetryTimer == true)
+                {
+                    // Starts the timer.
+                    TMRetry.Start();
+                }
+
+                // Runs code if condition is met.
+                else
+                {
+                    // Stops the timer.
+                    TMRetry.Stop();
                 }
             }
         }
@@ -574,8 +607,8 @@ namespace Title_In_Development
             if (File.Exists(SyncLog) == true)
             {
                 // Writes the Log variable to the log file and closes the pogram fully.
-                File.WriteAllText(SyncLog, File.ReadAllText(SyncLog) + Environment.NewLine + RTBLog.Text);
-                Application.Exit();
+                File.WriteAllText(SyncLog, File.ReadAllText(SyncLog) + Environment.NewLine + Environment.NewLine + RTBLog.Text);
+                Environment.Exit(0);
             }
 
             // Runs code if condition is met.
@@ -584,7 +617,7 @@ namespace Title_In_Development
                 // Creates the file, writes the contents of the RTBLog textbox to the log file and closes the pogram fully.
                 File.Create(SyncLog).Dispose();
                 File.WriteAllText(SyncLog, RTBLog.Text);
-                Application.Exit();
+                Environment.Exit(0);
             }
         }
 
@@ -661,11 +694,11 @@ namespace Title_In_Development
         // Runs code when the time has passed.
         private async void MV1SyncTimePassed(object sender, EventArgs e)
         {
-            // Passes a string to the L get set and passes the given value to the UD get set.
+            // Passes a string to the L get set and passes the given value to the UC get set.
             L = Environment.NewLine + DateTime.Now.ToString() + " - Info - MV1SyncTimePassed triggered.";
             MV1.UC = true;
 
-            // Enables the button.
+            // Disables the button.
             BTMV1Check.Enabled = false;
             BTMV1Sync.Enabled = false;
         }
@@ -688,6 +721,27 @@ namespace Title_In_Development
                 case 3: Builder[Builder.Length - 1] = Convert.ToChar("|"); LBMV1SyncStatus.Text = Builder.ToString(); break;
 
             }
+        }
+
+        // Runs code when the method is called.
+        private void ChangeOfTab(object sender, EventArgs e)
+        {
+            // Runs code if condition is met.
+            if (TCMenuTabs.SelectedTab == TPServerLog)
+            {
+                // Scrolls to the last line of the textbox.
+                TBServerConsole.SelectionStart = TBServerConsole.Text.Length;
+                TBServerConsole.ScrollToCaret();
+            }
+        }
+
+        // Runs code when the time has passed.
+        private void RetryTimePassed(object sender, EventArgs e)
+        {
+            // Passes a string to the L get set, passes the given value to the UC get set and passes the given value to the RT get set.
+            L = Environment.NewLine + DateTime.Now.ToString() + " - Info - RetryTimePassed triggered.";
+            MV1.UC = true;
+            RT = false;
         }
     }
 }
