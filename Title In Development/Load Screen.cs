@@ -293,7 +293,7 @@ namespace Title_In_Development
                 // Assigns XML all the properties within the XmlDocument class, loads the xml of the given file and creates a list of all child nodes of the given node.
                 XmlDocument XML = new XmlDocument();
                 XML.Load(@".\Configuration\Server Config.config");
-                XmlNodeList List = XML.SelectNodes("Servers/child::*");
+                XmlNodeList List = XML.SelectNodes("ServerSync/Servers/child::*");
 
                 // Runs code for every item in the list.
                 foreach (XmlNode Node in List)

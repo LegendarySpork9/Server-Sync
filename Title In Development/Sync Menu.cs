@@ -7,6 +7,8 @@ using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Reflection;
 
 namespace Title_In_Development
 {
@@ -17,6 +19,7 @@ namespace Title_In_Development
         Process H = new Process();
         ProcessStartInfo PSI;
         Process S;
+        XmlDocument XML = new XmlDocument();
 
         // Local Class Variables.
         private string Log;
@@ -204,6 +207,9 @@ namespace Title_In_Development
             // Passes the methods of the Process class with the start info of the given information.
             S = new Process { StartInfo = PSI };
             S.OutputDataReceived += OutputDataReceived;
+
+            // Hides the TPChangeLog page.
+            TCMenuTabs.TabPages.Remove(TPChangeLog);
         }
 
         // Runs code when the form loads.
@@ -231,6 +237,9 @@ namespace Title_In_Development
             MV1.UC = true;
             AutoSync = true;
             TMMV1Sync.Start();
+
+            // Calls the ChangeLog method.
+            ChangeLog();
         }
 
         // Runs code when the method is called.
@@ -627,46 +636,46 @@ namespace Title_In_Development
             // Runs code for every line in the textbox.
             for (int x = 0; x < RTBLog.Lines.Length; x++)
             {
-                // Check if the line contains the search string
+                // Check if the line contains the search string.
                 if (RTBLog.Lines[x].ToString().Contains("- Error -") == true)
                 {
-                    // Get the start and end positions of the line
+                    // Get the start and end positions of the line.
                     int lineStart = RTBLog.GetFirstCharIndexFromLine(x);
 
-                    // Change the color of the line
+                    // Change the color of the line.
                     RTBLog.Select(lineStart, RTBLog.Lines[x].Length);
                     RTBLog.SelectionBackColor = Color.FromArgb(255, 128, 128);
                 }
 
-                // Check if the line contains the search string
+                // Check if the line contains the search string.
                 else if (RTBLog.Lines[x].ToString().Contains("- Info -") == true)
                 {
-                    // Get the start and end positions of the line
+                    // Get the start and end positions of the line.
                     int lineStart = RTBLog.GetFirstCharIndexFromLine(x);
 
-                    // Change the color of the line
+                    // Change the color of the line.
                     RTBLog.Select(lineStart, RTBLog.Lines[x].Length);
                     RTBLog.SelectionBackColor = Color.FromArgb(128, 255, 128);
                 }
 
-                // Check if the line contains the search string
+                // Check if the line contains the search string.
                 else if (RTBLog.Lines[x].ToString().Contains("- Warn -") == true)
                 {
-                    // Get the start and end positions of the line
+                    // Get the start and end positions of the line.
                     int lineStart = RTBLog.GetFirstCharIndexFromLine(x);
 
-                    // Change the color of the line
+                    // Change the color of the line.
                     RTBLog.Select(lineStart, RTBLog.Lines[x].Length);
                     RTBLog.SelectionBackColor = Color.FromArgb(255, 181, 106);
                 }
 
-                // Check if the line contains the search string
+                // Check if the line contains the search string.
                 else if (RTBLog.Lines[x].ToString().Contains("- Debug -") == true)
                 {
-                    // Get the start and end positions of the line
+                    // Get the start and end positions of the line.
                     int lineStart = RTBLog.GetFirstCharIndexFromLine(x);
 
-                    // Change the color of the line
+                    // Change the color of the line.
                     RTBLog.Select(lineStart, RTBLog.Lines[x].Length);
                     RTBLog.SelectionBackColor = Color.FromArgb(255, 255, 128);
                 }
@@ -724,7 +733,7 @@ namespace Title_In_Development
         }
 
         // Runs code when the method is called.
-        private void ChangeOfTab(object sender, EventArgs e)
+        private async void ChangeOfTab(object sender, EventArgs e)
         {
             // Runs code if condition is met.
             if (TCMenuTabs.SelectedTab == TPServerLog)
@@ -736,12 +745,104 @@ namespace Title_In_Development
         }
 
         // Runs code when the time has passed.
-        private void RetryTimePassed(object sender, EventArgs e)
+        private async void RetryTimePassed(object sender, EventArgs e)
         {
             // Passes a string to the L get set, passes the given value to the UC get set and passes the given value to the RT get set.
             L = Environment.NewLine + DateTime.Now.ToString() + " - Info - RetryTimePassed triggered.";
             MV1.UC = true;
             RT = false;
+        }
+
+        // Runs code when the method is called.
+        private async void ChangeLog()
+        {
+            // Runs code even if error may occur.
+            try
+            {
+                // Loads the XML of the given file and changes the OldVersion value.
+                XML.Load(@".\Configuration\Server Config.config");
+                string OldVersion = XML.SelectSingleNode("ServerSync/ApplicationData").Attributes[0].Value;
+
+                // Runs code if condition is met.
+                if (OldVersion != Assembly.GetEntryAssembly().GetName().Version.ToString())
+                {
+                    // Disables the word wrap.
+                    RTBChangeLog.WordWrap = false;
+
+                    // Runs code for every line in the textbox.
+                    for (int x = 0; x < RTBChangeLog.Lines.Length; x++)
+                    {
+                        // Check if the line contains the search string.
+                        if (RTBChangeLog.Lines[x].ToString().Contains("Release") == true)
+                        {
+                            // Get the start and end positions of the line.
+                            int lineStart = RTBChangeLog.GetFirstCharIndexFromLine(x);
+
+                            // Change the font.
+                            RTBChangeLog.Select(lineStart, RTBChangeLog.Lines[x].Length);
+                            RTBChangeLog.SelectionFont = new Font("Microsoft Sans Serif", 16, FontStyle.Bold);
+                        }
+
+                        // Check if the line contains the search string.
+                        else if (RTBChangeLog.Lines[x].ToString().Contains("+") == true)
+                        {
+                            // Get the start and end positions of the line.
+                            int lineStart = RTBChangeLog.GetFirstCharIndexFromLine(x);
+
+                            // Change the color of the line.
+                            RTBChangeLog.Select(lineStart, RTBChangeLog.Lines[x].Length);
+                            RTBChangeLog.SelectionBackColor = Color.Green;
+                        }
+
+                        // Check if the line contains the search string.
+                        else if (RTBChangeLog.Lines[x].ToString().Contains("-") == true)
+                        {
+                            // Get the start and end positions of the line.
+                            int lineStart = RTBChangeLog.GetFirstCharIndexFromLine(x);
+
+                            // Change the color of the line.
+                            RTBChangeLog.Select(lineStart, RTBChangeLog.Lines[x].Length);
+                            RTBChangeLog.SelectionBackColor = Color.Red;
+                        }
+                    }
+
+                    // Enables the word wrap.
+                    RTBChangeLog.WordWrap = true;
+
+                    // Shows the TPChangeLog tab.
+                    TCMenuTabs.TabPages.Insert(TCMenuTabs.TabPages.Count, TPChangeLog);
+
+                    // Loads the XML of the given file, changes the Version value and saves the file.
+                    XML.Load(@".\Configuration\Server Config.config");
+                    XML.SelectSingleNode("ServerSync/ApplicationData").Attributes[0].Value = Assembly.GetEntryAssembly().GetName().Version.ToString();
+                    XML.Save(@".\Configuration\Server Config.config");
+                }
+            }
+
+            // Runs code if an error occurs.
+            catch (Exception ex)
+            {
+                // Creates a file path and name for the error log and creates the error message.
+                string ErrorLog = @".\Logs\Error Logs\ChangeLog_Error." + DateTime.Now.ToString("dd.MM.yyyy") + ".txt";
+                string ErrorMsg = "The following error occured while trying to show or alter the ChangeLog tab:" + Environment.NewLine + ex.ToString();
+
+                // Runs code if condition is met.
+                if (File.Exists(ErrorLog) == true)
+                {
+                    // Writes the error message to the log file and passes a string to the _SM.L get set.
+                    File.WriteAllText(ErrorLog, File.ReadAllText(ErrorLog) + Environment.NewLine + Environment.NewLine + ErrorMsg);
+                    L = Environment.NewLine + DateTime.Now.ToString() + " - Error - An error occured while trying to show or alter the ChangeLog tab, see error log for details.";
+                }
+
+                // Runs code if condition is met.
+                else
+                {
+                    // Creates the file, writes the error message to the log file and passes a string to the _SM.L get set.
+                    File.Create(ErrorLog).Dispose();
+                    File.WriteAllText(ErrorLog, ErrorMsg);
+                    L = Environment.NewLine + DateTime.Now.ToString() + " - Error - An error occured while trying to show or alter the ChangeLog tab, see error log for details.";
+                }
+            }
         }
     }
 }

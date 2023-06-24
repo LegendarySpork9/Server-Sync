@@ -432,12 +432,12 @@ namespace Title_In_Development
                 // Loads the XML of the given file, sets the FolderPath variable to the value in the given XML node, sets the ServerLocation variable to the value of the given variable, sets the ServerBatFile variable to the given information,
                 // sets the Hamachi variable to the given information, sets the LastRan variable to the value in the given XML node, sets the ServerHosted variable to the value in the given XML node and sets the ServerProp variable to the text of the given file.
                 XML.Load(@".\Configuration\Server Config.config");
-                string FolderPath = XML.SelectSingleNode("Servers/Minecraft-1.7.10/Location").Attributes[0].Value;
+                string FolderPath = XML.SelectSingleNode("ServerSync/Servers/Minecraft-1.7.10/Location").Attributes[0].Value;
                 ServerLocation = FolderPath + "\\";
-                ServerBatFile = XML.SelectSingleNode("Servers/Minecraft-1.7.10/Location").Attributes[0].Value + "\\Start.bat";
-                Hamachi = XML.SelectSingleNode("Servers/Minecraft-1.7.10/Location").Attributes[2].Value;
-                LastRan = XML.SelectSingleNode("Servers/Minecraft-1.7.10/LastUpdate").InnerText;
-                string ServerOpenLocal = XML.SelectSingleNode("Servers/Minecraft-1.7.10/ServerOpen").InnerText;
+                ServerBatFile = XML.SelectSingleNode("ServerSync/Servers/Minecraft-1.7.10/Location").Attributes[0].Value + "\\Start.bat";
+                Hamachi = XML.SelectSingleNode("ServerSync/Servers/Minecraft-1.7.10/Location").Attributes[2].Value;
+                LastRan = XML.SelectSingleNode("ServerSync/Servers/Minecraft-1.7.10/LastUpdate").InnerText;
+                string ServerOpenLocal = XML.SelectSingleNode("ServerSync/Servers/Minecraft-1.7.10/ServerOpen").InnerText;
                 string[] ServerProp = File.ReadAllLines(FolderPath + "\\server.properties");
 
                 // Runs code if condition is met.
@@ -773,7 +773,7 @@ namespace Title_In_Development
                 {
                     // Loads the XML of the given file, changes the ServerOpen true false flag and saves the file.
                     XML.Load(@".\Configuration\Server Config.config");
-                    XML.SelectSingleNode("Servers/Minecraft-1.7.10/ServerOpen").InnerText = "True";
+                    XML.SelectSingleNode("ServerSync/Servers/Minecraft-1.7.10/ServerOpen").InnerText = "True";
                     XML.Save(@".\Configuration\Server Config.config");
 
                     // Assigns Drobox all the properties of the DropboxClient class, stores the dropbox folder path, stores the name of the update zip file,
@@ -822,7 +822,7 @@ namespace Title_In_Development
                 {
                     // Loads the XML of the given file, changes the ServerOpen true false flag and saves the file.
                     XML.Load(@".\Configuration\Server Config.config");
-                    XML.SelectSingleNode("Servers/Minecraft-1.7.10/ServerOpen").InnerText = "False";
+                    XML.SelectSingleNode("ServerSync/Servers/Minecraft-1.7.10/ServerOpen").InnerText = "False";
                     XML.Save(@".\Configuration\Server Config.config");
 
                     // Assigns Drobox all the properties of the DropboxClient class, stores the dropbox folder path, stores the name of the update zip file,
@@ -932,7 +932,7 @@ namespace Title_In_Development
 
                     // Loads the XML of the given file and sets the DateLM to the value of the XML node.
                     XML.Load(@".\Configuration\Server Config.config");
-                    string DateLM = XML.SelectSingleNode("Servers/Minecraft-1.7.10/LastUpdate").InnerText;
+                    string DateLM = XML.SelectSingleNode("ServerSync/Servers/Minecraft-1.7.10/LastUpdate").InnerText;
 
                     // Runs code if condition is met.
                     if ((DateLM.Contains("AM") == true) || (DateLM.Contains("PM") == true))
@@ -1148,7 +1148,7 @@ namespace Title_In_Development
 
                 // Loads the XML of the given file, sets the DateLM to the value of the XML node and saves the XML of the given file.
                 XML.Load(@".\Configuration\Server Config.config");
-                XML.SelectSingleNode("Servers/Minecraft-1.7.10/LastUpdate").InnerText = LastWriteTime;
+                XML.SelectSingleNode("ServerSync/Servers/Minecraft-1.7.10/LastUpdate").InnerText = LastWriteTime;
                 XML.Save(@".\Configuration\Server Config.config");
 
                 string FilePath = ".\\Configuration\\Global Server Config.config";
@@ -1404,11 +1404,11 @@ namespace Title_In_Development
 
                 // Loads the XML of the given file, sets the ServerProp to the value of the XML node and moves the server properties file to the server folder.
                 XML.Load(@".\Configuration\Server Config.config");
-                string ServerProp = XML.SelectSingleNode("Servers/Minecraft-1.7.10/Location").Attributes[1].Value;
+                string ServerProp = XML.SelectSingleNode("ServerSync/Servers/Minecraft-1.7.10/Location").Attributes[1].Value;
                 File.Copy(ServerProp + "\\server.properties", ServerLocation + "\\server.properties", true);
 
                 // Updates the DateLM to match the DateLMServer and updates the config file.
-                XML.SelectSingleNode("Servers/Minecraft-1.7.10/LastUpdate").InnerText = DateLMServer;
+                XML.SelectSingleNode("ServerSync/Servers/Minecraft-1.7.10/LastUpdate").InnerText = DateLMServer;
                 XML.Save(@".\Configuration\Server Config.config");
 
                 // Deletes the Global Config file.
@@ -1511,7 +1511,7 @@ namespace Title_In_Development
                     // Sets the Hamachi variable to the value of the file variable, loads the XML of the given file, sets the DateLM to the value of the XML node, saves the XML of the given fil and passes a string to the _SM.L get set.
                     Hamachi = file;
                     XML.Load(@".\Configuration\Server Config.config");
-                    XML.SelectSingleNode("Servers/Minecraft-1.7.10/Location").Attributes[2].Value = Hamachi;
+                    XML.SelectSingleNode("ServerSync/Servers/Minecraft-1.7.10/Location").Attributes[2].Value = Hamachi;
                     XML.Save(@".\Configuration\Server Config.config");
                     _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Info - Hamachi exe. location found in " + TopLevelDirectory + ".";
                 }

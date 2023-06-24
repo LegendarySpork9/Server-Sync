@@ -472,6 +472,23 @@
         ir//2Q==
 </value>
   </data>
+  <data name="RTBChangeLog.Text" xml:space="preserve">
+    <value>Release 1.3.0
+
+Issue #18:  Server Log Auto Scroll: When changing to the "Server Log" tab, if the console wasn't updating, then it wouldn't scroll to the bottom. As such, code has been amended to scroll to the bottom of the server console when a user changes to the “Server Log” tab.
+
+Issue #21: Zip File Buildup: When a download would fail and restarted, the program wouldn’t start again, instead it would add to the existing data. The code has been changes to delete the file before an upload or download if it already exists.
+
+Issue #22: Product Version: Will wanted a way to see what version of the program was being run. This has now been added to the “Log” tab as the second message.
+
+Issue #23: Logging Duplication: When the program closes and the logs are outputted, it would duplicate the data, as such this has been fixed so that it only logs the data once.
+
+Issue #24: Upload or Download Retry: When the program errors on an upload or download, the program needs to be closed and reopened. A retry system has been added to try the upload or download three times if it fails with a 30 second interval with each try. If it still fails, then it changes the sync status to “Failed” but continues to execute as intended.
+
+Release 1.3.1
+
+Issue #26: Change Log: As a way of knowing what issues have been released/what new work has been done, a change log has been added that will show once upon a new release.</value>
+  </data>
   <metadata name="TMMV1Sync.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>

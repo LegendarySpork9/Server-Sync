@@ -63,6 +63,8 @@
             this.BTSubmitCommand = new System.Windows.Forms.Button();
             this.TBCommand = new System.Windows.Forms.TextBox();
             this.TBServerConsole = new System.Windows.Forms.TextBox();
+            this.TPChangeLog = new System.Windows.Forms.TabPage();
+            this.RTBChangeLog = new System.Windows.Forms.RichTextBox();
             this.TMMV1Sync = new System.Windows.Forms.Timer(this.components);
             this.TMMV1Status = new System.Windows.Forms.Timer(this.components);
             this.TMRetry = new System.Windows.Forms.Timer(this.components);
@@ -71,6 +73,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.PBMV1Icon)).BeginInit();
             this.TPLog.SuspendLayout();
             this.TPServerLog.SuspendLayout();
+            this.TPChangeLog.SuspendLayout();
             this.SuspendLayout();
             // 
             // TCMenuTabs
@@ -79,6 +82,7 @@
             this.TCMenuTabs.Controls.Add(this.TPMinecraftV2);
             this.TCMenuTabs.Controls.Add(this.TPLog);
             this.TCMenuTabs.Controls.Add(this.TPServerLog);
+            this.TCMenuTabs.Controls.Add(this.TPChangeLog);
             this.TCMenuTabs.Location = new System.Drawing.Point(0, 0);
             this.TCMenuTabs.Name = "TCMenuTabs";
             this.TCMenuTabs.SelectedIndex = 0;
@@ -446,6 +450,26 @@
             this.TBServerConsole.Size = new System.Drawing.Size(496, 423);
             this.TBServerConsole.TabIndex = 0;
             // 
+            // TPChangeLog
+            // 
+            this.TPChangeLog.Controls.Add(this.RTBChangeLog);
+            this.TPChangeLog.Location = new System.Drawing.Point(4, 22);
+            this.TPChangeLog.Name = "TPChangeLog";
+            this.TPChangeLog.Size = new System.Drawing.Size(496, 455);
+            this.TPChangeLog.TabIndex = 4;
+            this.TPChangeLog.Text = "Change Log";
+            this.TPChangeLog.UseVisualStyleBackColor = true;
+            // 
+            // RTBChangeLog
+            // 
+            this.RTBChangeLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RTBChangeLog.Location = new System.Drawing.Point(0, 0);
+            this.RTBChangeLog.Name = "RTBChangeLog";
+            this.RTBChangeLog.ReadOnly = true;
+            this.RTBChangeLog.Size = new System.Drawing.Size(496, 455);
+            this.RTBChangeLog.TabIndex = 0;
+            this.RTBChangeLog.Text = resources.GetString("RTBChangeLog.Text");
+            // 
             // TMMV1Sync
             // 
             this.TMMV1Sync.Interval = 300000;
@@ -482,6 +506,7 @@
             this.TPLog.ResumeLayout(false);
             this.TPServerLog.ResumeLayout(false);
             this.TPServerLog.PerformLayout();
+            this.TPChangeLog.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -524,5 +549,7 @@
         private System.Windows.Forms.Timer TMMV1Sync;
         private System.Windows.Forms.Timer TMMV1Status;
         private System.Windows.Forms.Timer TMRetry;
+        private System.Windows.Forms.TabPage TPChangeLog;
+        private System.Windows.Forms.RichTextBox RTBChangeLog;
     }
 }
