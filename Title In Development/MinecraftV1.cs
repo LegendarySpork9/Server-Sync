@@ -420,8 +420,8 @@ namespace Title_In_Development
             }
         }
 
-    // Runs code when the method is called.
-    private async void FillVariables()
+        // Runs code when the method is called.
+        private async void FillVariables()
         {
             // Runs code even if error may occur.
             try
@@ -1058,6 +1058,10 @@ namespace Title_In_Development
                 // Deletes the ZIP file if it already exists to avoid error.
                 File.Delete(".\\Data\\Minecraft 1.7.10.zip");
 
+                // Passes the information to disable the buttons.
+                _SM.UIBS = "MinecraftV1";
+                _SM.UIBTF = true;
+
                 // Passes a string to the _SM.L get set.
                 _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Info - Local Minecraft 1.7.10 server has been updated or a manual sync has been triggered, beginning upload.";
 
@@ -1206,6 +1210,9 @@ namespace Title_In_Development
                 // Starts the timer.
                 _SM.MV1ST = true;
 
+                // Passes the information to Enable the buttons.
+                _SM.UIBTF = false;
+
                 // Passes a string to the _SM.L get set.
                 _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Info - Upload for the minecraft 1.7.10 server is complete.";
 
@@ -1238,17 +1245,19 @@ namespace Title_In_Development
                         _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Warn - Retry timer has been started, Upload will be attempted again in 30 seconds.";
                         UploadUpdate = false;
                         RetryNumber += 1;
+                        _SM.RTS = "MinecraftV1";
                         _SM.RT = true;
                     }
 
                     // Runs code if condition is met.
                     else
                     {
-                        // Sets the value of the SyncStatus Variable to the given string, stops the timer, sets the UploadUpdate variable to false, calls the FillVariables method and Stops the timer.
+                        // Sets the value of the SyncStatus Variable to the given string, stops the timer, sets the UploadUpdate variable to false, calls the FillVariables method and stops the timer.
                         SyncStatus = "Failed";
                         _SM.MV1SST = false;
                         UploadUpdate = false;
                         FillVariables();
+                        _SM.RTS = null;
                         _SM.RT = false;
                     }
                 }
@@ -1265,20 +1274,22 @@ namespace Title_In_Development
                     if (RetryNumber < 3)
                     {
                         // Passes a string to the _SM.L get set, sets the UploadUpdate variable to false, increases RetryNumber by 1 and starts the timer.
-                        _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Warn - Retry timer has been started, Upload will be attempted again in 30 seconds.";
+                        _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Warn - Retry timer has been started, upload will be attempted again in 30 seconds.";
                         UploadUpdate = false;
                         RetryNumber += 1;
+                        _SM.RTS = "MinecraftV1";
                         _SM.RT = true;
                     }
 
                     // Runs code if condition is met.
                     else
                     {
-                        // Sets the value of the SyncStatus Variable to the given string, stops the timer, sets the UploadUpdate variable to false, calls the FillVariables method and Stops the timer.
+                        // Sets the value of the SyncStatus Variable to the given string, stops the timer, sets the UploadUpdate variable to false, calls the FillVariables method and stops the timer.
                         SyncStatus = "Failed";
                         _SM.MV1SST = false;
                         UploadUpdate = false;
                         FillVariables();
+                        _SM.RTS = null;
                         _SM.RT = false;
                     }
                 }
@@ -1296,6 +1307,10 @@ namespace Title_In_Development
 
                 // Deletes the ZIP file if it already exists to avoid error.
                 File.Delete(".\\Data\\Minecraft 1.7.10.zip");
+
+                // Passes the information to disable the buttons.
+                _SM.UIBS = "MinecraftV1";
+                _SM.UIBTF = true;
 
                 // Passes a string to the _SM.L get set.
                 _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Info - Update for the minecraft 1.7.10 server is required, beginning update.";
@@ -1327,9 +1342,9 @@ namespace Title_In_Development
                         var ContentLength = Response.Content.Headers.ContentLength;
                         var TotalBytesRead = 0L;
                         int NumberofChunks = 1;
-                        int UploadTime = 6 * (int)Math.Ceiling((double)((int)(ContentLength / 10485760)));
+                        int UploadTime = 3 * (int)Math.Ceiling((double)((int)(ContentLength / ChunkSize)));
                         Time = TimeSpan.FromSeconds(UploadTime);
-                        _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Info - File will be downloaded in " + (int)Math.Ceiling((double)((int)(ContentLength / 10485760)))
+                        _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Info - File will be downloaded in " + (int)Math.Ceiling((double)((int)(ContentLength / ChunkSize)))
                             + " chunks, this will take approximately " + Time.ToString(@"hh\:mm\:ss") + " seconds.";
 
                         // Reads the file into a stream.
@@ -1357,7 +1372,7 @@ namespace Title_In_Development
                                     // Adds the bytes to the existing file, adds the number of bytes to the total and calculates the chunk number.
                                     await fileStream.WriteAsync(buffer, 0, BytesRead);
                                     TotalBytesRead += BytesRead;
-                                    double Chunk = (double)TotalBytesRead / 10485760;
+                                    double Chunk = (double)TotalBytesRead / ChunkSize;
 
                                     // Runs code if condition is met.
                                     if (Chunk == (int)Chunk)
@@ -1417,6 +1432,9 @@ namespace Title_In_Development
                 // Starts the timer.
                 _SM.MV1ST = true;
 
+                // Passes the information to Enable the buttons.
+                _SM.UIBTF = false;
+
                 // Passes a string to the _SM.L get set.
                 _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Info - Update for the minecraft 1.7.10 server is complete.";
 
@@ -1446,9 +1464,10 @@ namespace Title_In_Development
                     if (RetryNumber < 3)
                     {
                         // Passes a string to the _SM.L get set, sets the DownloadUpdate variable to false, increases RetryNumber by 1 and starts the timer.
-                        _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Warn - Retry timer has been started, Download will be attempted again in 30 seconds.";
+                        _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Warn - Retry timer has been started, download will be attempted again in 30 seconds.";
                         DownloadUpdate = false;
                         RetryNumber += 1;
+                        _SM.RTS = "MinecraftV1";
                         _SM.RT = true;
                     }
 
@@ -1460,6 +1479,7 @@ namespace Title_In_Development
                         _SM.MV1SST = false;
                         UploadUpdate = false;
                         FillVariables();
+                        _SM.RTS = null;
                         _SM.RT = false;
                     }
                 }
@@ -1479,17 +1499,19 @@ namespace Title_In_Development
                         _SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Warn - Retry timer has been started, Download will be attempted again in 30 seconds.";
                         DownloadUpdate = false;
                         RetryNumber += 1;
+                        _SM.RTS = "MinecraftV1";
                         _SM.RT = true;
                     }
 
                     // Runs code if condition is met.
                     else
                     {
-                        // Sets the value of the SyncStatus Variable to the given string, stops the timer, sets the UploadUpdate variable to false, calls the FillVariables method and Stops the timer.
+                        // Sets the value of the SyncStatus Variable to the given string, stops the timer, sets the UploadUpdate variable to false, calls the FillVariables method and stops the timer.
                         SyncStatus = "Failed";
                         _SM.MV1SST = false;
                         UploadUpdate = false;
                         FillVariables();
+                        _SM.RTS = null;
                         _SM.RT = false;
                     }
                 }

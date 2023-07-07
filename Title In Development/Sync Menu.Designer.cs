@@ -57,6 +57,12 @@
             this.BTMV1Sync = new System.Windows.Forms.Button();
             this.LBMV1SyncStatus = new System.Windows.Forms.Label();
             this.TPMinecraftV2 = new System.Windows.Forms.TabPage();
+            this.TPColdWaters = new System.Windows.Forms.TabPage();
+            this.BTCWDotMod = new System.Windows.Forms.Button();
+            this.BTCWVanilla = new System.Windows.Forms.Button();
+            this.LBCWLastRan = new System.Windows.Forms.Label();
+            this.LBCWModRunning = new System.Windows.Forms.Label();
+            this.PBCWIcon = new System.Windows.Forms.PictureBox();
             this.TPLog = new System.Windows.Forms.TabPage();
             this.RTBLog = new System.Windows.Forms.RichTextBox();
             this.TPServerLog = new System.Windows.Forms.TabPage();
@@ -68,9 +74,12 @@
             this.TMMV1Sync = new System.Windows.Forms.Timer(this.components);
             this.TMMV1Status = new System.Windows.Forms.Timer(this.components);
             this.TMRetry = new System.Windows.Forms.Timer(this.components);
+            this.TMKyleServer = new System.Windows.Forms.Timer(this.components);
             this.TCMenuTabs.SuspendLayout();
             this.TPMinecraftV1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PBMV1Icon)).BeginInit();
+            this.TPColdWaters.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.PBCWIcon)).BeginInit();
             this.TPLog.SuspendLayout();
             this.TPServerLog.SuspendLayout();
             this.TPChangeLog.SuspendLayout();
@@ -80,6 +89,7 @@
             // 
             this.TCMenuTabs.Controls.Add(this.TPMinecraftV1);
             this.TCMenuTabs.Controls.Add(this.TPMinecraftV2);
+            this.TCMenuTabs.Controls.Add(this.TPColdWaters);
             this.TCMenuTabs.Controls.Add(this.TPLog);
             this.TCMenuTabs.Controls.Add(this.TPServerLog);
             this.TCMenuTabs.Controls.Add(this.TPChangeLog);
@@ -389,6 +399,72 @@
             this.TPMinecraftV2.Text = "Minecraft 1.12.2";
             this.TPMinecraftV2.UseVisualStyleBackColor = true;
             // 
+            // TPColdWaters
+            // 
+            this.TPColdWaters.Controls.Add(this.BTCWDotMod);
+            this.TPColdWaters.Controls.Add(this.BTCWVanilla);
+            this.TPColdWaters.Controls.Add(this.LBCWLastRan);
+            this.TPColdWaters.Controls.Add(this.LBCWModRunning);
+            this.TPColdWaters.Controls.Add(this.PBCWIcon);
+            this.TPColdWaters.Location = new System.Drawing.Point(4, 22);
+            this.TPColdWaters.Name = "TPColdWaters";
+            this.TPColdWaters.Padding = new System.Windows.Forms.Padding(3);
+            this.TPColdWaters.Size = new System.Drawing.Size(496, 455);
+            this.TPColdWaters.TabIndex = 5;
+            this.TPColdWaters.Text = "Cold Waters";
+            this.TPColdWaters.UseVisualStyleBackColor = true;
+            // 
+            // BTCWDotMod
+            // 
+            this.BTCWDotMod.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BTCWDotMod.Location = new System.Drawing.Point(268, 311);
+            this.BTCWDotMod.Name = "BTCWDotMod";
+            this.BTCWDotMod.Size = new System.Drawing.Size(220, 136);
+            this.BTCWDotMod.TabIndex = 4;
+            this.BTCWDotMod.Text = "Dot Mod";
+            this.BTCWDotMod.UseVisualStyleBackColor = true;
+            this.BTCWDotMod.Click += new System.EventHandler(this.CWDotMod);
+            // 
+            // BTCWVanilla
+            // 
+            this.BTCWVanilla.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BTCWVanilla.Location = new System.Drawing.Point(8, 311);
+            this.BTCWVanilla.Name = "BTCWVanilla";
+            this.BTCWVanilla.Size = new System.Drawing.Size(220, 136);
+            this.BTCWVanilla.TabIndex = 3;
+            this.BTCWVanilla.Text = "Vanilla +";
+            this.BTCWVanilla.UseVisualStyleBackColor = true;
+            this.BTCWVanilla.Click += new System.EventHandler(this.CWVanilla);
+            // 
+            // LBCWLastRan
+            // 
+            this.LBCWLastRan.AutoSize = true;
+            this.LBCWLastRan.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LBCWLastRan.Location = new System.Drawing.Point(241, 286);
+            this.LBCWLastRan.Name = "LBCWLastRan";
+            this.LBCWLastRan.Size = new System.Drawing.Size(115, 17);
+            this.LBCWLastRan.TabIndex = 2;
+            this.LBCWLastRan.Text = "Game Last Ran: ";
+            // 
+            // LBCWModRunning
+            // 
+            this.LBCWModRunning.AutoSize = true;
+            this.LBCWModRunning.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LBCWModRunning.Location = new System.Drawing.Point(8, 286);
+            this.LBCWModRunning.Name = "LBCWModRunning";
+            this.LBCWModRunning.Size = new System.Drawing.Size(100, 17);
+            this.LBCWModRunning.TabIndex = 1;
+            this.LBCWModRunning.Text = "Mod Running: ";
+            // 
+            // PBCWIcon
+            // 
+            this.PBCWIcon.Image = ((System.Drawing.Image)(resources.GetObject("PBCWIcon.Image")));
+            this.PBCWIcon.Location = new System.Drawing.Point(8, 8);
+            this.PBCWIcon.Name = "PBCWIcon";
+            this.PBCWIcon.Size = new System.Drawing.Size(480, 270);
+            this.PBCWIcon.TabIndex = 0;
+            this.PBCWIcon.TabStop = false;
+            // 
             // TPLog
             // 
             this.TPLog.Controls.Add(this.RTBLog);
@@ -465,7 +541,6 @@
             this.RTBChangeLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RTBChangeLog.Location = new System.Drawing.Point(0, 0);
             this.RTBChangeLog.Name = "RTBChangeLog";
-            this.RTBChangeLog.ReadOnly = true;
             this.RTBChangeLog.Size = new System.Drawing.Size(496, 455);
             this.RTBChangeLog.TabIndex = 0;
             this.RTBChangeLog.Text = resources.GetString("RTBChangeLog.Text");
@@ -483,6 +558,11 @@
             // 
             this.TMRetry.Interval = 30000;
             this.TMRetry.Tick += new System.EventHandler(this.RetryTimePassed);
+            // 
+            // TMKyleServer
+            // 
+            this.TMKyleServer.Interval = 1000;
+            this.TMKyleServer.Tick += new System.EventHandler(this.KSSyncTimePassed);
             // 
             // Sync_Menu
             // 
@@ -503,6 +583,9 @@
             this.TPMinecraftV1.ResumeLayout(false);
             this.TPMinecraftV1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PBMV1Icon)).EndInit();
+            this.TPColdWaters.ResumeLayout(false);
+            this.TPColdWaters.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.PBCWIcon)).EndInit();
             this.TPLog.ResumeLayout(false);
             this.TPServerLog.ResumeLayout(false);
             this.TPServerLog.PerformLayout();
@@ -551,5 +634,12 @@
         private System.Windows.Forms.Timer TMRetry;
         private System.Windows.Forms.TabPage TPChangeLog;
         private System.Windows.Forms.RichTextBox RTBChangeLog;
+        private System.Windows.Forms.TabPage TPColdWaters;
+        private System.Windows.Forms.PictureBox PBCWIcon;
+        private System.Windows.Forms.Button BTCWDotMod;
+        private System.Windows.Forms.Button BTCWVanilla;
+        private System.Windows.Forms.Label LBCWLastRan;
+        private System.Windows.Forms.Label LBCWModRunning;
+        private System.Windows.Forms.Timer TMKyleServer;
     }
 }

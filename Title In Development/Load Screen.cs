@@ -171,8 +171,41 @@ namespace Title_In_Development
                 // Runs code if condition is met.
                 if (x == Servers.Length)
                 {
-                    // Increases the Stage variable.
-                    Stage += 1;
+                    // Runs code if condition is met.
+                    if (x == 0)
+                    {
+                        // Sets the varable to the defined string and passes it to the SM.L get set.
+                        string StartDebug = "No Servers Found";
+
+                        // Runs code if condition is met.
+                        if (CurrentCharacter >= StartDebug.Length)
+                        {
+                            // Changes the timer interval, adds a new line to the textbox, increases the Stage variable, resets the CurrentCharacter variable, starts the timer and passes StartDebug to the SM.L get set.
+                            TMWait.Interval = 175;
+                            TBStartDebug.Text += Environment.NewLine;
+                            Stage += 1;
+                            CurrentCharacter = 0;
+                            TMWait.Start();
+                            SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Warn - " + StartDebug;
+                        }
+
+                        // Runs code if condition is met.
+                        else if (CurrentCharacter < StartDebug.Length)
+                        {
+                            // Changes the timer interval, adds the current character in StartDebug to the textbox, increases the current character, starts the timer.
+                            TMWait.Interval = 50;
+                            TBStartDebug.Text += StartDebug[CurrentCharacter].ToString();
+                            CurrentCharacter += 1;
+                            TMWait.Start();
+                        }
+                    }
+
+                    // Runs code if condition is met.
+                    else
+                    {
+                        // Increases the Stage variable.
+                        Stage += 1;
+                    }
                 }
 
                 // Runs code if condition is met.
@@ -215,11 +248,12 @@ namespace Title_In_Development
                 // Runs code if condition is met.
                 if (CurrentCharacter >= StartDebug.Length)
                 {
-                    // Changes the timer interval, adds a new line to the textbox, increases the Stage variable, starts the timer and passes StartDebug to the SM.L get set.
+                    // Changes the timer interval, increases the Stage variable, starts the timer, passes StartDebug to the SM.L get set and passes the list of found servers to the SM.ServerArray get set.
                     TMWait.Interval = 175;
                     Stage += 1;
                     TMWait.Start();
                     SM.L = Environment.NewLine + DateTime.Now.ToString() + " - Debug - " + StartDebug;
+                    SM.ServerArray = Servers;
                 }
 
                 // Runs code if condition is met.
@@ -240,7 +274,6 @@ namespace Title_In_Development
                 PLoadingGraphic.Show();
                 TMWait.Stop();
                 TMGraphic.Start();
-                SM.MV1FV = true;
             }
         }
 

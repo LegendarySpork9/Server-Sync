@@ -6,30 +6,38 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Reflection;
+using System.Net;
 
 namespace Title_In_Development
 {
     public partial class Sync_Menu : Form
     {
         // Global Class Objects.
-        private MinecraftV1 MV1;
+        XmlDocument XML = new XmlDocument();
         Process H = new Process();
         ProcessStartInfo PSI;
         Process S;
-        XmlDocument XML = new XmlDocument();
+        Process KRC;
+        private MinecraftV1 MV1;
+        private ColdWaters CW;
 
         // Local Class Variables.
         private string Log;
         private int Counter;
+        private bool RetryTimer;
+        private string RetryTimerSource;
+        private bool UIBED;
+        private string UIBSource;
+        private string[] Servers = { };
         private bool MV1SyncTimer;
         private bool MV1StatusTimer;
-        private bool MV1FillVariables;
         private bool FillMV1TF;
-        private bool AutoSync;
-        private bool RetryTimer;
+        private bool MV1AutoSync;
+        private bool FillCWTF;
+        private bool KSActive;
+        private bool KSODR;
 
         // Local get set used to change the value of the Log variable.
         public string L
@@ -48,6 +56,112 @@ namespace Title_In_Development
                 Log = value;
                 RTBLog.Text += Log;
                 FormatLog();
+            }
+        }
+
+        // Local get set used to change the value of the RetryTimer variable.
+        public bool RT
+        {
+            // Obtains the value of the variable.
+            get
+            {
+                // Obtains the value of the variable.
+                return RetryTimer;
+            }
+
+            // Changes the value of the variable.
+            set
+            {
+                // Changes the value of the variable.
+                RetryTimer = value;
+
+                //Runs code if condition is met.
+                if (RetryTimer == true)
+                {
+                    // Starts the timer.
+                    TMRetry.Start();
+                }
+
+                // Runs code if condition is met.
+                else
+                {
+                    // Stops the timer.
+                    TMRetry.Stop();
+                }
+            }
+        }
+
+        // Local get set used to change the value of the RetryTimerSource variable.
+        public string RTS
+        {
+            // Obtains the value of the variable.
+            get
+            {
+                // Obtains the value of the variable.
+                return RetryTimerSource;
+            }
+
+            // Changes the value of the variable.
+            set
+            {
+                // Changes the value of the variable.
+                RetryTimerSource = value;
+            }
+        }
+
+        // Local get set used to change the value of the UIBED variable.
+        public bool UIBTF
+        {
+            // Obtains the value of the variable.
+            get
+            {
+                // Obtains the value of the variable.
+                return UIBED;
+            }
+
+            // Changes the value of the variable.
+            set
+            {
+                // Changes the value of the variable and calls the UIButtons method.
+                UIBED = value;
+                UIButtons();
+            }
+        }
+
+        // Local get set used to change the value of the UIBSource variable.
+        public string UIBS
+        {
+            // Obtains the value of the variable.
+            get
+            {
+                // Obtains the value of the variable.
+                return UIBSource;
+            }
+
+            // Changes the value of the variable.
+            set
+            {
+                // Changes the value of the variable.
+                UIBSource = value;
+            }
+        }
+
+        // Local get set used to change the value of the Servers variable.
+        public string[] ServerArray
+        {
+            // Obtains the value of the variable.
+            get
+            {
+                // Obtains the value of the variable.
+                return Servers;
+            }
+
+            // Changes the value of the variable.
+            set
+            {
+                // Changes the value of the variable and calls the ServerFills method.
+                Servers = value;
+                ServerFills();
             }
         }
 
@@ -117,38 +231,6 @@ namespace Title_In_Development
             }
         }
 
-        // Local get set used to change the value of the RetryTimer variable.
-        public bool RT
-        {
-            // Obtains the value of the variable.
-            get
-            {
-                // Obtains the value of the variable.
-                return RetryTimer;
-            }
-
-            // Changes the value of the variable.
-            set
-            {
-                // Changes the value of the variable.
-                RetryTimer = value;
-
-                //Runs code if condition is met.
-                if (RetryTimer == true)
-                {
-                    // Starts the timer.
-                    TMRetry.Start();
-                }
-
-                // Runs code if condition is met.
-                else
-                {
-                    // Stops the timer.
-                    TMRetry.Stop();
-                }
-            }
-        }
-
         // Local get set used to change the value of the FillMV1TF variable.
         public bool FMV1
         {
@@ -168,22 +250,22 @@ namespace Title_In_Development
             }
         }
 
-        // Local get set used to change the value of the MV1FillVariables variable.
-        public bool MV1FV
+        // Local get set used to change the value of the FillCWTF variable.
+        public bool FCW
         {
             // Obtains the value of the variable.
             get
             {
                 // Obtains the value of the variable.
-                return MV1FillVariables;
+                return FillCWTF;
             }
 
             // Changes the value of the variable.
             set
             {
-                // Changes the value of the variable, calls the FV get Set and sets it to true.
-                MV1FillVariables = value;
-                MV1.FV = true;
+                // Changes the value of the variable and calls the FillCW method.
+                FillCWTF = value;
+                FillCW();
             }
         }
 
@@ -192,8 +274,9 @@ namespace Title_In_Development
         {
             InitializeComponent();
 
-            // Passes the methods of the current form to the MV1 class.
+            // Passes the methods of the current form to the classes.
             MV1 = new MinecraftV1(this);
+            CW = new ColdWaters(this);
 
             // Passes the methods of the ProcessStartInfo class with the given information.
             PSI = new ProcessStartInfo
@@ -207,8 +290,10 @@ namespace Title_In_Development
             // Passes the methods of the Process class with the start info of the given information.
             S = new Process { StartInfo = PSI };
             S.OutputDataReceived += OutputDataReceived;
+            KRC = new Process { StartInfo = PSI };
+            KRC.OutputDataReceived += KRCOutputDataReceived;
 
-            // Hides the TPChangeLog page.
+            // Removes the ChangeLog tab.
             TCMenuTabs.TabPages.Remove(TPChangeLog);
         }
 
@@ -228,19 +313,352 @@ namespace Title_In_Development
         // Runs code when the form loads.
         private void Sync_Menu_Load(object sender, EventArgs e)
         {
-            // Hides the TPServerLog tab.
-            TCMenuTabs.TabPages.Remove(TPServerLog);
-            TCMenuTabs.TabPages.Remove(TPMinecraftV2);
-
-            // Calls the UC get set, sets it to true, changes the value of the AutoSync variable to the given value, starts the timer and passes a string to the L get set. 
-            L = Environment.NewLine + DateTime.Now.ToString() + " - Warn - Automatic Sync Check has been started, checking for updates will be triggered every 5 minutes.";
-            MV1.UC = true;
-            AutoSync = true;
-            TMMV1Sync.Start();
-
             // Calls the ChangeLog method.
             ChangeLog();
+
+            // Calls the ShowServerPages method.
+            ShowServerPages();
         }
+
+        // Runs code when the method is called.
+        private async void ShowServerPages()
+        {
+            // Hides the pages.
+            TCMenuTabs.TabPages.Remove(TPMinecraftV1);
+            TCMenuTabs.TabPages.Remove(TPMinecraftV2);
+            TCMenuTabs.TabPages.Remove(TPColdWaters);
+            TCMenuTabs.TabPages.Remove(TPLog);
+            TCMenuTabs.TabPages.Remove(TPServerLog);
+
+            // Runs code for every line in the array.
+            for (int x = 0; x < Servers.Length; x++)
+            {
+                // Runs code if condition is met.
+                if (Servers[x].ToString() == "Minecraft 1.7.10")
+                {
+                    // Shows the Minecraft 1.7.10 tab.
+                    TCMenuTabs.TabPages.Insert(TCMenuTabs.TabPages.Count, TPMinecraftV1);
+                }
+
+                // Runs code if condition is met.
+                else if (Servers[x].ToString() == "Minecraft 1.12.2")
+                {
+                    // Shows the Minecraft 1.12.2 tab.
+                    TCMenuTabs.TabPages.Insert(TCMenuTabs.TabPages.Count, TPMinecraftV2);
+                }
+
+                // Runs code if condition is met.
+                else if ((Servers[x].ToString() == "Cold Waters") && (Dns.GetHostName() == "The-Beast"))
+                {
+                    // Shows the Cold Waters tab.
+                    TCMenuTabs.TabPages.Insert(TCMenuTabs.TabPages.Count, TPColdWaters);
+                }
+            }
+
+            // Shows the Log tab.
+            TCMenuTabs.TabPages.Insert(TCMenuTabs.TabPages.Count, TPLog);
+        }
+
+        // Runs code when the method is called.
+        private async void ServerFills()
+        {
+            // Runs code for every line in the array.
+            for (int x = 0; x < Servers.Length; x++)
+            {
+                // Runs code if condition is met.
+                if (Servers[x].ToString() == "Minecraft 1.7.10")
+                {
+                    // Calls the UC get set, sets it to true, changes the value of the AutoSync variable to the given value, starts the timer and passes a string to the L get set. 
+                    L = Environment.NewLine + DateTime.Now.ToString() + " - Warn - Automatic Sync Check has been started for the Minecraft 1.7.10 tab, checking for updates will be triggered every 5 minutes.";
+                    MV1AutoSync = true;
+                    TMMV1Sync.Start();
+
+                    // Passes the given information to the MV1.FV get set and passes the given information to the MV1.UC get set.
+                    MV1.FV = true;
+                    MV1.UC = true;
+                }
+
+                // Runs code if condition is met.
+                else if (Servers[x].ToString() == "Minecraft 1.12.2")
+                {
+                    MessageBox.Show("Not Supported yet.");
+                }
+
+                // Runs code if condition is met.
+                if (Servers[x].ToString() == "Cold Waters")
+                {
+                    // Passes the given information to the CW.FV get set.
+                    CW.FV = true;
+                }
+
+                // Runs code if condition is met.
+                if (Servers[x].ToString() == "Kyles Server")
+                {
+                    // Calls the KRCServer method.
+                    KRCServer();
+                }
+            }
+        }
+
+        // Runs code if button is clicked.
+        private async void SCClicked(object sender, EventArgs e)
+        {
+            // Passes the command to the server.
+            S.StandardInput.WriteLine(TBCommand.Text);
+            S.StandardInput.Flush();
+        }
+
+        // Runs code when the method is called.
+        private async void OutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            // Runs code if condition is met.
+            if (string.IsNullOrEmpty(e.Data) == false)
+            {
+                // Adds the console output to the TBServerConsole textbox and scrolls it to the last line of the textbox.
+                TBServerConsole.Invoke((MethodInvoker)delegate {
+                    TBServerConsole.Text += e.Data + Environment.NewLine;
+                    TBServerConsole.SelectionStart = TBServerConsole.Text.Length;
+                    TBServerConsole.ScrollToCaret();
+                });
+
+                // Runs code if condition is met
+                if (e.Data.Contains("D:\\1.7.10 Server>PAUSE") == true)
+                {
+                    // Simulates a key press and then closes the server.
+                    S.StandardInput.WriteLine();
+                    S.StandardInput.WriteLine();
+                    S.CancelOutputRead();
+                    S.Kill();
+                }
+            }
+        }
+
+        // Runs code when the method is called.
+        private async void ChangeOfTab(object sender, EventArgs e)
+        {
+            // Runs code if condition is met.
+            if (TCMenuTabs.SelectedTab == TPServerLog)
+            {
+                // Scrolls to the last line of the textbox.
+                TBServerConsole.SelectionStart = TBServerConsole.Text.Length;
+                TBServerConsole.ScrollToCaret();
+            }
+        }
+
+        // Runs code when the time has passed.
+        private async void RetryTimePassed(object sender, EventArgs e)
+        {
+            // Passes a string to the L get set.
+            L = Environment.NewLine + DateTime.Now.ToString() + " - Info - RetryTimePassed triggered.";
+
+            // Runs code if condition is met.
+            if (RetryTimerSource == "MinecraftV1")
+            {
+                // Passes the given value to the UC get set and passes the given value to the RT get set.
+                MV1.UC = true;
+                RetryTimerSource = null;
+                RT = false;
+            }
+
+            // Runs code if condition is met.
+            else if (RetryTimerSource == "ColdWaters")
+            {
+                // Passes the given value to the SM get set and passes the given value to the RT get set.
+                CW.SM = true;
+                RetryTimerSource = null;
+                RT = false;
+            }
+        }
+
+        // Runs code when the method is called.
+        private async void UIButtons()
+        {
+            // Runs code if condition is met.
+            if ((UIBED == true) && (UIBSource == "MinecraftV1"))
+            {
+                // Disables the buttons
+                BTMV1Sync.Enabled = false;
+                BTMV1Check.Enabled = false;
+                BTMV1Start.Enabled = false;
+            }
+        }
+
+        // Runs code when the text is changed.
+        private async void FormatLog()
+        {
+            // Runs code for every line in the textbox.
+            for (int x = 0; x < RTBLog.Lines.Length; x++)
+            {
+                // Check if the line contains the search string.
+                if (RTBLog.Lines[x].ToString().Contains("- Error -") == true)
+                {
+                    // Get the start and end positions of the line.
+                    int lineStart = RTBLog.GetFirstCharIndexFromLine(x);
+
+                    // Change the color of the line.
+                    RTBLog.Select(lineStart, RTBLog.Lines[x].Length);
+                    RTBLog.SelectionBackColor = Color.FromArgb(255, 128, 128);
+                }
+
+                // Check if the line contains the search string.
+                else if (RTBLog.Lines[x].ToString().Contains("- Info -") == true)
+                {
+                    // Get the start and end positions of the line.
+                    int lineStart = RTBLog.GetFirstCharIndexFromLine(x);
+
+                    // Change the color of the line.
+                    RTBLog.Select(lineStart, RTBLog.Lines[x].Length);
+                    RTBLog.SelectionBackColor = Color.FromArgb(128, 255, 128);
+                }
+
+                // Check if the line contains the search string.
+                else if (RTBLog.Lines[x].ToString().Contains("- Warn -") == true)
+                {
+                    // Get the start and end positions of the line.
+                    int lineStart = RTBLog.GetFirstCharIndexFromLine(x);
+
+                    // Change the color of the line.
+                    RTBLog.Select(lineStart, RTBLog.Lines[x].Length);
+                    RTBLog.SelectionBackColor = Color.FromArgb(255, 181, 106);
+                }
+
+                // Check if the line contains the search string.
+                else if (RTBLog.Lines[x].ToString().Contains("- Debug -") == true)
+                {
+                    // Get the start and end positions of the line.
+                    int lineStart = RTBLog.GetFirstCharIndexFromLine(x);
+
+                    // Change the color of the line.
+                    RTBLog.Select(lineStart, RTBLog.Lines[x].Length);
+                    RTBLog.SelectionBackColor = Color.FromArgb(255, 255, 128);
+                }
+            }
+
+            //RTBLog.SelectionStart = RTBLog.Text.Length;
+            //RTBLog.ScrollToCaret();
+        }
+
+        // Runs code when the method is called.
+        private async void ChangeLog()
+        {
+            // Runs code even if error may occur.
+            try
+            {
+                // Loads the XML of the given file and changes the OldVersion value.
+                XML.Load(@".\Configuration\Server Config.config");
+                string OldVersion = XML.SelectSingleNode("ServerSync/ApplicationData").Attributes[0].Value;
+
+                // Runs code if condition is met.
+                if (OldVersion != Assembly.GetEntryAssembly().GetName().Version.ToString())
+                {
+                    // Disables the word wrap.
+                    RTBChangeLog.WordWrap = false;
+
+                    // Runs code for every line in the textbox.
+                    for (int x = 0; x < RTBChangeLog.Lines.Length; x++)
+                    {
+                        // Check if the line contains the search string.
+                        if (RTBChangeLog.Lines[x].ToString().Contains("Release") == true)
+                        {
+                            // Get the start and end positions of the line.
+                            int lineStart = RTBChangeLog.GetFirstCharIndexFromLine(x);
+
+                            // Change the font.
+                            RTBChangeLog.Select(lineStart, RTBChangeLog.Lines[x].Length);
+                            RTBChangeLog.SelectionFont = new Font("Microsoft Sans Serif", 16, FontStyle.Bold);
+                        }
+
+                        // Check if the line contains the search string.
+                        else if (RTBChangeLog.Lines[x].ToString().Contains("+") == true)
+                        {
+                            // Get the start and end positions of the line.
+                            int lineStart = RTBChangeLog.GetFirstCharIndexFromLine(x);
+
+                            // Change the color of the line.
+                            RTBChangeLog.Select(lineStart, RTBChangeLog.Lines[x].Length);
+                            RTBChangeLog.SelectionBackColor = Color.Green;
+                        }
+
+                        // Check if the line contains the search string.
+                        else if (RTBChangeLog.Lines[x].ToString().Contains("-") == true)
+                        {
+                            // Get the start and end positions of the line.
+                            int lineStart = RTBChangeLog.GetFirstCharIndexFromLine(x);
+
+                            // Change the color of the line.
+                            RTBChangeLog.Select(lineStart, RTBChangeLog.Lines[x].Length);
+                            RTBChangeLog.SelectionBackColor = Color.Red;
+                        }
+                    }
+
+                    // Enables the word wrap.
+                    RTBChangeLog.WordWrap = true;
+
+                    // Shows the TPChangeLog tab.
+                    TCMenuTabs.TabPages.Insert(TCMenuTabs.TabPages.Count, TPChangeLog);
+
+                    // Loads the XML of the given file, changes the Version value and saves the file.
+                    XML.Load(@".\Configuration\Server Config.config");
+                    XML.SelectSingleNode("ServerSync/ApplicationData").Attributes[0].Value = Assembly.GetEntryAssembly().GetName().Version.ToString();
+                    XML.Save(@".\Configuration\Server Config.config");
+                }
+            }
+
+            // Runs code if an error occurs.
+            catch (Exception ex)
+            {
+                // Creates a file path and name for the error log and creates the error message.
+                string ErrorLog = @".\Logs\Error Logs\ChangeLog_Error." + DateTime.Now.ToString("dd.MM.yyyy") + ".txt";
+                string ErrorMsg = "The following error occured while trying to show or alter the ChangeLog tab:" + Environment.NewLine + ex.ToString();
+
+                // Runs code if condition is met.
+                if (File.Exists(ErrorLog) == true)
+                {
+                    // Writes the error message to the log file and passes a string to the _SM.L get set.
+                    File.WriteAllText(ErrorLog, File.ReadAllText(ErrorLog) + Environment.NewLine + Environment.NewLine + ErrorMsg);
+                    L = Environment.NewLine + DateTime.Now.ToString() + " - Error - An error occured while trying to show or alter the ChangeLog tab, see error log for details.";
+                }
+
+                // Runs code if condition is met.
+                else
+                {
+                    // Creates the file, writes the error message to the log file and passes a string to the _SM.L get set.
+                    File.Create(ErrorLog).Dispose();
+                    File.WriteAllText(ErrorLog, ErrorMsg);
+                    L = Environment.NewLine + DateTime.Now.ToString() + " - Error - An error occured while trying to show or alter the ChangeLog tab, see error log for details.";
+                }
+            }
+        }
+
+        // Runs code when the program closes.
+        private void Exit(object sender, FormClosingEventArgs e)
+        {
+            // Passes the given string to the L get set.
+            L = Environment.NewLine + DateTime.Now.ToString() + " - Info - " + "Logging Stopped";
+
+            // Closes the pogram fully.
+            // Creates a file path and name for the error log and creates the error message.
+            string SyncLog = @".\Logs\Sync Logs\Main Log." + DateTime.Now.ToString("dd.MM.yyyy") + ".txt";
+
+            // Runs code if condition is met.
+            if (File.Exists(SyncLog) == true)
+            {
+                // Writes the Log variable to the log file and closes the pogram fully.
+                File.WriteAllText(SyncLog, File.ReadAllText(SyncLog) + Environment.NewLine + Environment.NewLine + RTBLog.Text);
+                Environment.Exit(0);
+            }
+
+            // Runs code if condition is met.
+            else
+            {
+                // Creates the file, writes the contents of the RTBLog textbox to the log file and closes the pogram fully.
+                File.Create(SyncLog).Dispose();
+                File.WriteAllText(SyncLog, RTBLog.Text);
+                Environment.Exit(0);
+            }
+        }
+
+        // Minecraft 1.7.10 //
 
         // Runs code when the method is called.
         private async void FillMV1()
@@ -435,99 +853,151 @@ namespace Title_In_Development
         // Runs code if button is clicked.
         private async void MV1StartClick(object sender, EventArgs e)
         {
-            // Passes a string to the L get set, disables the button, enables the stop button, changes the LBServerStatus value, calls the SS get set, sets it to the given string, empties the TBServerConsole and shows the TPServerLog tab.
-            L = Environment.NewLine + DateTime.Now.ToString() + " - Info - Starting Minecraft 1.7.10 Server and required applications.";
-            BTMV1Start.Enabled = false;
-            BTMV1Sync.Enabled = false;
-            BTMV1Stop.Enabled = true;
-            LBMV1ServerStatus.Text = "Server Status: Running";
-            MV1.SS = "Running";
-            TBServerConsole.Text = null;
-            TCMenuTabs.TabPages.Insert(TCMenuTabs.TabPages.Count, TPServerLog);
-
-            // Runs code if condition is met.
-            if (MV1.H == "")
+            // Runs code even if error may occur.
+            try
             {
-                // Passes a string to the L get set.
-                L = Environment.NewLine + DateTime.Now.ToString() + " - Warn - Hamachi exe location unknown.";
-            
-                // Sets the parameters for the directory search.
-                string SearchDirectoryC = "C:\\";
-                string SearchDirectoryD = "D:\\";
+                // Passes a string to the L get set, disables the button, enables the stop button, changes the LBServerStatus value, calls the SS get set, sets it to the given string, empties the TBServerConsole and shows the TPServerLog tab.
+                L = Environment.NewLine + DateTime.Now.ToString() + " - Info - Starting Minecraft 1.7.10 Server and required applications.";
+                BTMV1Start.Enabled = false;
+                BTMV1Sync.Enabled = false;
+                BTMV1Stop.Enabled = true;
+                LBMV1ServerStatus.Text = "Server Status: Running";
+                MV1.SS = "Running";
+                TBServerConsole.Text = null;
+                TCMenuTabs.TabPages.Insert(TCMenuTabs.TabPages.Count, TPServerLog);
 
-                // Passes a string to the L get set and calls the SD get set.
-                L = Environment.NewLine + DateTime.Now.ToString() + " - Debug - Searching for Hamachi exe in " + SearchDirectoryC + ".";
-                L = Environment.NewLine + DateTime.Now.ToString() + " - Debug - Searching for Hamachi exe in " + SearchDirectoryD + ".";
-                MV1.SD = SearchDirectoryC;
-                MV1.SD = SearchDirectoryD;
-           
                 // Runs code if condition is met.
                 if (MV1.H == "")
                 {
                     // Passes a string to the L get set.
-                    L = Environment.NewLine + DateTime.Now.ToString() + " - Error - Hamachi exe. location not found in " + SearchDirectoryC + " or " + SearchDirectoryD + ".";
+                    L = Environment.NewLine + DateTime.Now.ToString() + " - Warn - Hamachi exe location unknown.";
+
+                    // Sets the parameters for the directory search.
+                    string SearchDirectoryC = "C:\\";
+                    string SearchDirectoryD = "D:\\";
+
+                    // Passes a string to the L get set and calls the SD get set.
+                    L = Environment.NewLine + DateTime.Now.ToString() + " - Debug - Searching for Hamachi exe in " + SearchDirectoryC + ".";
+                    L = Environment.NewLine + DateTime.Now.ToString() + " - Debug - Searching for Hamachi exe in " + SearchDirectoryD + ".";
+                    MV1.SD = SearchDirectoryC;
+                    MV1.SD = SearchDirectoryD;
+
+                    // Runs code if condition is met.
+                    if (MV1.H == "")
+                    {
+                        // Passes a string to the L get set.
+                        L = Environment.NewLine + DateTime.Now.ToString() + " - Error - Hamachi exe. location not found in " + SearchDirectoryC + " or " + SearchDirectoryD + ".";
+                    }
+
+                    // Runs code if condition is met.
+                    else if (MV1.H.Contains(SearchDirectoryC) == true)
+                    {
+                        // Passes a string to the L get set.
+                        L = Environment.NewLine + DateTime.Now.ToString() + " - Info - Hamachi exe. location not found in " + SearchDirectoryD + ".";
+                    }
+
+                    // Runs code if condition is met.
+                    else
+                    {
+                        // Passes a string to the L get set.
+                        L = Environment.NewLine + DateTime.Now.ToString() + " - Info - Hamachi exe. location not found in " + SearchDirectoryC + ".";
+                    }
+
+                    // Starts Hamachi and the server bat file.
+                    H.StartInfo.FileName = MV1.H;
+                    H.Start();
+                    S.StartInfo.FileName = MV1.SB;
+                    S.StartInfo.WorkingDirectory = MV1.SL;
+                    S.Start();
+                    S.BeginOutputReadLine();
                 }
-            
-                // Runs code if condition is met.
-                else if (MV1.H.Contains(SearchDirectoryC) == true)
-                {
-                    // Passes a string to the L get set.
-                    L = Environment.NewLine + DateTime.Now.ToString() + " - Info - Hamachi exe. location not found in " + SearchDirectoryD + ".";
-                }
-            
+
                 // Runs code if condition is met.
                 else
                 {
-                    // Passes a string to the L get set.
-                    L = Environment.NewLine + DateTime.Now.ToString() + " - Info - Hamachi exe. location not found in " + SearchDirectoryC + ".";
+                    // Starts Hamachi and the server bat file.
+                    H.StartInfo.FileName = MV1.H;
+                    H.Start();
+                    S.StartInfo.FileName = MV1.SB;
+                    S.StartInfo.WorkingDirectory = MV1.SL;
+                    S.Start();
+                    S.BeginOutputReadLine();
                 }
-            
-                // Starts Hamachi and the server bat file.
-                H.StartInfo.FileName = MV1.H;
-                H.Start();
-                S.StartInfo.FileName = MV1.SB;
-                S.StartInfo.WorkingDirectory = MV1.SL;
-                S.Start();
-                S.BeginOutputReadLine();
             }
 
-                // Runs code if condition is met.
-            else
+            // Runs code if an error occurs.
+            catch (Exception ex)
             {
-                // Starts Hamachi and the server bat file.
-                H.StartInfo.FileName = MV1.H;
-                H.Start();
-                S.StartInfo.FileName = MV1.SB;
-                S.StartInfo.WorkingDirectory = MV1.SL;
-                S.Start();
-                S.BeginOutputReadLine();
+                // Creates a file path and name for the error log and creates the error message.
+                string ErrorLog = @".\Logs\Error Logs\MV1Start_Error." + DateTime.Now.ToString("dd.MM.yyyy") + ".txt";
+                string ErrorMsg = "The following error occured while trying to start the Minecraft 1.7.10 Server:" + Environment.NewLine + ex.ToString();
+
+                // Runs code if condition is met.
+                if (File.Exists(ErrorLog) == true)
+                {
+                    // Writes the error message to the log file and passes a string to the _SM.L get set.
+                    File.WriteAllText(ErrorLog, File.ReadAllText(ErrorLog) + Environment.NewLine + Environment.NewLine + ErrorMsg);
+                    L = Environment.NewLine + DateTime.Now.ToString() + " - Error - An error occured while trying to start the Minecraft 1.7.10 Server, see error log for details.";
+                }
+
+                // Runs code if condition is met.
+                else
+                {
+                    // Creates the file, writes the error message to the log file and passes a string to the _SM.L get set.
+                    File.Create(ErrorLog).Dispose();
+                    File.WriteAllText(ErrorLog, ErrorMsg);
+                    L = Environment.NewLine + DateTime.Now.ToString() + " - Error - An error occured while trying to start the Minecraft 1.7.10 Server, see error log for details.";
+                }
             }
         }
 
         // Runs code if button is clicked.
         private async void MV1StopClick(object sender, EventArgs e)
         {
-            // Passes a string to the L get set.
-            L = Environment.NewLine + DateTime.Now.ToString() + " - Info - Stopping Minecraft 1.7.10 Server and required applications.";
+            // Runs code even if error may occur.
+            try
+            {
+                // Passes a string to the L get set.
+                L = Environment.NewLine + DateTime.Now.ToString() + " - Info - Stopping Minecraft 1.7.10 Server and required applications.";
 
-            // Stops the server and closes Hamachi.
-            S.StandardInput.WriteLine("stop");
-            S.StandardInput.Flush();
-            H.Kill();
+                // Stops the server and closes Hamachi.
+                S.StandardInput.WriteLine("stop");
+                S.StandardInput.Flush();
+                H.Kill();
 
-            // Pauses the task for 10 seconds, then simulates a key press and then closes the server.
-            await Task.Delay(10000);
-            S.StandardInput.WriteLine();
-            S.CancelOutputRead();
-            S.Kill();
+                // Enables the button, disables the stop button, changes the LBServerStatus value, calls the SS get set, sets it to the given string and hides the TPServerLog tab.
+                BTMV1Start.Enabled = true;
+                BTMV1Sync.Enabled = true;
+                BTMV1Stop.Enabled = false;
+                LBMV1ServerStatus.Text = "Server Status: Stopped";
+                MV1.SS = "Stopped";
+                TCMenuTabs.TabPages.Remove(TPServerLog);
+            }
 
-            // Enables the button, disables the stop button, changes the LBServerStatus value, calls the SS get set, sets it to the given string and hides the TPServerLog tab
-            BTMV1Start.Enabled = true;
-            BTMV1Sync.Enabled = true;
-            BTMV1Stop.Enabled = false;
-            LBMV1ServerStatus.Text = "Server Status: Stopped";
-            MV1.SS = "Stopped";
-            TCMenuTabs.TabPages.Remove(TPServerLog);
+            // Runs code if an error occurs.
+            catch (Exception ex)
+            {
+                // Creates a file path and name for the error log and creates the error message.
+                string ErrorLog = @".\Logs\Error Logs\MV1Stop_Error." + DateTime.Now.ToString("dd.MM.yyyy") + ".txt";
+                string ErrorMsg = "The following error occured while trying to stop the Minecraft 1.7.10 Server:" + Environment.NewLine + ex.ToString();
+
+                // Runs code if condition is met.
+                if (File.Exists(ErrorLog) == true)
+                {
+                    // Writes the error message to the log file and passes a string to the _SM.L get set.
+                    File.WriteAllText(ErrorLog, File.ReadAllText(ErrorLog) + Environment.NewLine + Environment.NewLine + ErrorMsg);
+                    L = Environment.NewLine + DateTime.Now.ToString() + " - Error - An error occured while trying to stop the Minecraft 1.7.10 Server, see error log for details.";
+                }
+
+                // Runs code if condition is met.
+                else
+                {
+                    // Creates the file, writes the error message to the log file and passes a string to the _SM.L get set.
+                    File.Create(ErrorLog).Dispose();
+                    File.WriteAllText(ErrorLog, ErrorMsg);
+                    L = Environment.NewLine + DateTime.Now.ToString() + " - Error - An error occured while trying to stop the Minecraft 1.7.10 Server, see error log for details.";
+                }
+            }
         }
 
         // Runs code if button is clicked.
@@ -572,12 +1042,12 @@ namespace Title_In_Development
         private async void MV1ASClick(object sender, EventArgs e)
         {
             // Runs code if condition met.
-            if (AutoSync == true)
+            if (MV1AutoSync == true)
             {
                 // Changes the text on the button, stops the timer, changes the value of the AutoSync variable and passes a string to the L get set.
-                L = Environment.NewLine + DateTime.Now.ToString() + " - Warn - Automatic Sync Check has been stopped, checking will need to be triggered manually.";
+                L = Environment.NewLine + DateTime.Now.ToString() + " - Warn - Automatic Sync Check has been stopped for the Minecraft 1.7.10 tab, checking for updates will need to be triggered manually.";
                 BTMV1AutoSync.Text = "Start Auto Sync";
-                AutoSync = false;
+                MV1AutoSync = false;
                 TMMV1Sync.Stop();
             }
 
@@ -585,118 +1055,10 @@ namespace Title_In_Development
             else
             {
                 // Changes the text on the button, start the timer, changes the value of the AutoSync variable and passes a string to the L get set.
-                L = Environment.NewLine + DateTime.Now.ToString() + " - Warn - Automatic Sync Check has been started, checking for updates will be triggered every 5 minutes.";
+                L = Environment.NewLine + DateTime.Now.ToString() + " - Warn - Automatic Sync Check has been started for the Minecraft 1.7.10 tab, checking for updates will be triggered every 5 minutes.";
                 BTMV1AutoSync.Text = "Stop Auto Sync";
-                AutoSync = true;
+                MV1AutoSync = true;
                 TMMV1Sync.Start();
-            }
-        }
-
-        // Runs code if button is clicked.
-        private async void SCClicked(object sender, EventArgs e)
-        {
-            // Passes the command to the server.
-            S.StandardInput.WriteLine(TBCommand.Text);
-            S.StandardInput.Flush();
-        }
-
-        
-
-        // Runs code when the program closes.
-        private void Exit(object sender, FormClosingEventArgs e)
-        {
-            // Passes the given string to the L get set.
-            L = Environment.NewLine + DateTime.Now.ToString() + " - Info - " + "Logging Stopped";
-
-            // Closes the pogram fully.
-            // Creates a file path and name for the error log and creates the error message.
-            string SyncLog = @".\Logs\Sync Logs\Main Log." + DateTime.Now.ToString("dd.MM.yyyy") + ".txt";
-
-            // Runs code if condition is met.
-            if (File.Exists(SyncLog) == true)
-            {
-                // Writes the Log variable to the log file and closes the pogram fully.
-                File.WriteAllText(SyncLog, File.ReadAllText(SyncLog) + Environment.NewLine + Environment.NewLine + RTBLog.Text);
-                Environment.Exit(0);
-            }
-
-            // Runs code if condition is met.
-            else
-            {
-                // Creates the file, writes the contents of the RTBLog textbox to the log file and closes the pogram fully.
-                File.Create(SyncLog).Dispose();
-                File.WriteAllText(SyncLog, RTBLog.Text);
-                Environment.Exit(0);
-            }
-        }
-
-        // Runs code when the text is changed.
-        private async void FormatLog()
-        {
-            // Runs code for every line in the textbox.
-            for (int x = 0; x < RTBLog.Lines.Length; x++)
-            {
-                // Check if the line contains the search string.
-                if (RTBLog.Lines[x].ToString().Contains("- Error -") == true)
-                {
-                    // Get the start and end positions of the line.
-                    int lineStart = RTBLog.GetFirstCharIndexFromLine(x);
-
-                    // Change the color of the line.
-                    RTBLog.Select(lineStart, RTBLog.Lines[x].Length);
-                    RTBLog.SelectionBackColor = Color.FromArgb(255, 128, 128);
-                }
-
-                // Check if the line contains the search string.
-                else if (RTBLog.Lines[x].ToString().Contains("- Info -") == true)
-                {
-                    // Get the start and end positions of the line.
-                    int lineStart = RTBLog.GetFirstCharIndexFromLine(x);
-
-                    // Change the color of the line.
-                    RTBLog.Select(lineStart, RTBLog.Lines[x].Length);
-                    RTBLog.SelectionBackColor = Color.FromArgb(128, 255, 128);
-                }
-
-                // Check if the line contains the search string.
-                else if (RTBLog.Lines[x].ToString().Contains("- Warn -") == true)
-                {
-                    // Get the start and end positions of the line.
-                    int lineStart = RTBLog.GetFirstCharIndexFromLine(x);
-
-                    // Change the color of the line.
-                    RTBLog.Select(lineStart, RTBLog.Lines[x].Length);
-                    RTBLog.SelectionBackColor = Color.FromArgb(255, 181, 106);
-                }
-
-                // Check if the line contains the search string.
-                else if (RTBLog.Lines[x].ToString().Contains("- Debug -") == true)
-                {
-                    // Get the start and end positions of the line.
-                    int lineStart = RTBLog.GetFirstCharIndexFromLine(x);
-
-                    // Change the color of the line.
-                    RTBLog.Select(lineStart, RTBLog.Lines[x].Length);
-                    RTBLog.SelectionBackColor = Color.FromArgb(255, 255, 128);
-                }
-            }
-
-            //RTBLog.SelectionStart = RTBLog.Text.Length;
-            //RTBLog.ScrollToCaret();
-        }
-
-        // Runs code when the method is called.
-        private async void OutputDataReceived(object sender, DataReceivedEventArgs e)
-        {
-            // Runs code if condition is met.
-            if (string.IsNullOrEmpty(e.Data) == false)
-            {
-                // Adds the console output to the TBServerConsole textbox and scrolls it to the last line of the textbox.
-                TBServerConsole.Invoke((MethodInvoker)delegate {
-                    TBServerConsole.Text += e.Data + Environment.NewLine;
-                    TBServerConsole.SelectionStart = TBServerConsole.Text.Length;
-                    TBServerConsole.ScrollToCaret();
-                });
             }
         }
 
@@ -732,106 +1094,132 @@ namespace Title_In_Development
             }
         }
 
-        // Runs code when the method is called.
-        private async void ChangeOfTab(object sender, EventArgs e)
-        {
-            // Runs code if condition is met.
-            if (TCMenuTabs.SelectedTab == TPServerLog)
-            {
-                // Scrolls to the last line of the textbox.
-                TBServerConsole.SelectionStart = TBServerConsole.Text.Length;
-                TBServerConsole.ScrollToCaret();
-            }
-        }
-
-        // Runs code when the time has passed.
-        private async void RetryTimePassed(object sender, EventArgs e)
-        {
-            // Passes a string to the L get set, passes the given value to the UC get set and passes the given value to the RT get set.
-            L = Environment.NewLine + DateTime.Now.ToString() + " - Info - RetryTimePassed triggered.";
-            MV1.UC = true;
-            RT = false;
-        }
+        // Cold Waters //
 
         // Runs code when the method is called.
-        private async void ChangeLog()
+        private async void FillCW()
         {
             // Runs code even if error may occur.
             try
             {
-                // Loads the XML of the given file and changes the OldVersion value.
-                XML.Load(@".\Configuration\Server Config.config");
-                string OldVersion = XML.SelectSingleNode("ServerSync/ApplicationData").Attributes[0].Value;
+                // Passes a string to the L get set.
+                L = Environment.NewLine + DateTime.Now.ToString() + " - Debug - Fill Variables triggered for the Cold Waters tab.";
 
-                // Runs code if condition is met.
-                if (OldVersion != Assembly.GetEntryAssembly().GetName().Version.ToString())
+                // Runs code if condition met.
+                if (CW.MR == "Vanilla +")
                 {
-                    // Disables the word wrap.
-                    RTBChangeLog.WordWrap = false;
-
-                    // Runs code for every line in the textbox.
-                    for (int x = 0; x < RTBChangeLog.Lines.Length; x++)
-                    {
-                        // Check if the line contains the search string.
-                        if (RTBChangeLog.Lines[x].ToString().Contains("Release") == true)
-                        {
-                            // Get the start and end positions of the line.
-                            int lineStart = RTBChangeLog.GetFirstCharIndexFromLine(x);
-
-                            // Change the font.
-                            RTBChangeLog.Select(lineStart, RTBChangeLog.Lines[x].Length);
-                            RTBChangeLog.SelectionFont = new Font("Microsoft Sans Serif", 16, FontStyle.Bold);
-                        }
-
-                        // Check if the line contains the search string.
-                        else if (RTBChangeLog.Lines[x].ToString().Contains("+") == true)
-                        {
-                            // Get the start and end positions of the line.
-                            int lineStart = RTBChangeLog.GetFirstCharIndexFromLine(x);
-
-                            // Change the color of the line.
-                            RTBChangeLog.Select(lineStart, RTBChangeLog.Lines[x].Length);
-                            RTBChangeLog.SelectionBackColor = Color.Green;
-                        }
-
-                        // Check if the line contains the search string.
-                        else if (RTBChangeLog.Lines[x].ToString().Contains("-") == true)
-                        {
-                            // Get the start and end positions of the line.
-                            int lineStart = RTBChangeLog.GetFirstCharIndexFromLine(x);
-
-                            // Change the color of the line.
-                            RTBChangeLog.Select(lineStart, RTBChangeLog.Lines[x].Length);
-                            RTBChangeLog.SelectionBackColor = Color.Red;
-                        }
-                    }
-
-                    // Enables the word wrap.
-                    RTBChangeLog.WordWrap = true;
-
-                    // Shows the TPChangeLog tab.
-                    TCMenuTabs.TabPages.Insert(TCMenuTabs.TabPages.Count, TPChangeLog);
-
-                    // Loads the XML of the given file, changes the Version value and saves the file.
-                    XML.Load(@".\Configuration\Server Config.config");
-                    XML.SelectSingleNode("ServerSync/ApplicationData").Attributes[0].Value = Assembly.GetEntryAssembly().GetName().Version.ToString();
-                    XML.Save(@".\Configuration\Server Config.config");
+                    // Enables the buttons.
+                    BTCWVanilla.Enabled = false;
                 }
+
+                // Runs code if condition met.
+                else
+                {
+                    // Enables the buttons.
+                    BTCWDotMod.Enabled = false;
+                }
+
+                // Fills out the menus containers with the given information.
+                PBCWIcon.Image = new Bitmap(".\\Data\\Cold Waters Logo.jpeg");
+                LBCWModRunning.Text = "Running: " + CW.MR;
+                LBCWLastRan.Text = "Game Last Ran: " + CW.LR;
+
+                // Changes the value of the FillCWTF variable to the given value.
+                FillCWTF = false;
             }
 
             // Runs code if an error occurs.
             catch (Exception ex)
             {
                 // Creates a file path and name for the error log and creates the error message.
-                string ErrorLog = @".\Logs\Error Logs\ChangeLog_Error." + DateTime.Now.ToString("dd.MM.yyyy") + ".txt";
-                string ErrorMsg = "The following error occured while trying to show or alter the ChangeLog tab:" + Environment.NewLine + ex.ToString();
+                string ErrorLog = @".\Logs\Error Logs\FillCW_Error." + DateTime.Now.ToString("dd.MM.yyyy") + ".txt";
+                string ErrorMsg = "The following error occured while trying to fill out the form for the Cold Waters tab:" + Environment.NewLine + ex.ToString();
+
+                // Runs code if condition is met.
+                if (File.Exists(ErrorLog) == true)
+                {
+                    // Writes the error message to the log file and passes a string to the L get set.
+                    File.WriteAllText(ErrorLog, File.ReadAllText(ErrorLog) + Environment.NewLine + Environment.NewLine + ErrorMsg);
+                    L = Environment.NewLine + DateTime.Now.ToString() + " - Error - An error occured while trying to fill out the form for the Cold Waters tab, see error log for details.";
+                }
+
+                // Runs code if condition is met.
+                else
+                {
+                    // Creates the file, writes the error message to the log file and passes a string to the L get set.
+                    File.Create(ErrorLog).Dispose();
+                    File.WriteAllText(ErrorLog, ErrorMsg);
+                    L = Environment.NewLine + DateTime.Now.ToString() + " - Error - An error occured while trying to fill out the form for the Cold Waters tab, see error log for details.";
+                }
+            }
+        }
+
+        // Runs code if button is clicked.
+        private async void CWVanilla(object sender, EventArgs e)
+        {
+            // Passes a string to the L get set.
+            L = Environment.NewLine + DateTime.Now.ToString() + " - Info - Changing the running mod for Cold Waters to Vanilla +.";
+
+            // Enables the button, disables the stop button and calls the M get set.
+            BTCWDotMod.Enabled = true;
+            BTCWVanilla.Enabled = false;
+            CW.M = "Vanilla +";
+        }
+
+        // Runs code if button is clicked.
+        private async void CWDotMod(object sender, EventArgs e)
+        {
+            // Passes a string to the L get set.
+            L = Environment.NewLine + DateTime.Now.ToString() + " - Info - Changing the running mod for Cold Waters to the Dot Mod.";
+
+            // Enables the button, disables the stop button and calls the M get set.
+            BTCWVanilla.Enabled = true;
+            BTCWDotMod.Enabled = false;
+            CW.M = "DotMod";
+        }
+
+        // Kyle's Server //
+        private async void KRCServer()
+        {
+            // Runs code even if error may occur.
+            try
+            {
+                // Passes a string to the L get set.
+                L = Environment.NewLine + DateTime.Now.ToString() + " - Info - Checking the details of Kyle's Server.";
+
+                // Loads the XML of the given file and sets the variables to the value in the given XML node.
+                XML.Load(@".\Configuration\Server Config.config");
+                string IP = XML.SelectSingleNode("ServerSync/Servers/Kyles-Server/Location").Attributes[0].Value;
+                string Port = XML.SelectSingleNode("ServerSync/Servers/Kyles-Server/Location").Attributes[1].Value;
+
+                // Creats the command for the Powershell process.
+                string Command = "Test-NetConnection -computername " + IP + " -port " + Port;
+
+                // Starts PowerShell and pings the port.
+                KRC.StartInfo.FileName = "powershell.exe";
+                KRC.Start();
+                KRC.BeginOutputReadLine();
+                KRC.StandardInput.WriteLine(Command);
+                KRC.StandardInput.Flush();
+
+                // Changes the interval and starts the timer.
+                TMKyleServer.Interval = 1000;
+                TMKyleServer.Start();
+            }
+
+            // Runs code if an error occurs.
+            catch (Exception ex)
+            {
+                // Creates a file path and name for the error log and creates the error message.
+                string ErrorLog = @".\Logs\Error Logs\KyleServer_Error." + DateTime.Now.ToString("dd.MM.yyyy") + ".txt";
+                string ErrorMsg = "The following error occured while trying to check the details of Kyle's Server:" + Environment.NewLine + ex.ToString();
 
                 // Runs code if condition is met.
                 if (File.Exists(ErrorLog) == true)
                 {
                     // Writes the error message to the log file and passes a string to the _SM.L get set.
                     File.WriteAllText(ErrorLog, File.ReadAllText(ErrorLog) + Environment.NewLine + Environment.NewLine + ErrorMsg);
-                    L = Environment.NewLine + DateTime.Now.ToString() + " - Error - An error occured while trying to show or alter the ChangeLog tab, see error log for details.";
+                    L = Environment.NewLine + DateTime.Now.ToString() + " - Error - An error occured while trying to check the details of Kyle's Server, see error log for details.";
                 }
 
                 // Runs code if condition is met.
@@ -840,7 +1228,86 @@ namespace Title_In_Development
                     // Creates the file, writes the error message to the log file and passes a string to the _SM.L get set.
                     File.Create(ErrorLog).Dispose();
                     File.WriteAllText(ErrorLog, ErrorMsg);
-                    L = Environment.NewLine + DateTime.Now.ToString() + " - Error - An error occured while trying to show or alter the ChangeLog tab, see error log for details.";
+                    L = Environment.NewLine + DateTime.Now.ToString() + " - Error - An error occured while trying to check the details of Kyle's Server, see error log for details.";
+                }
+            }
+        }
+
+        // Runs code when the method is called.
+        private async void KRCOutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            // Runs code if condition is met.
+            if (string.IsNullOrEmpty(e.Data) == false)
+            {
+                // Runs code if condition is met.
+                if (e.Data.Contains("TcpTestSucceeded : True") == true)
+                {
+                    // Changes the value of the KSActive variable, changes the value of the KSODR variable, closes PowerShell, changes the timer interval and starts the timer.
+                    KSActive = true;
+                    KSODR = true;
+                    KRC.CancelOutputRead();
+                    KRC.Kill();
+                }
+
+                // Runs code if condition is met.
+                else if (e.Data.Contains("TcpTestSucceeded       : False") == true)
+                {
+                    // Changes the value of the KSActive variable, changes the value of the KSODR variable, closes PowerShell, changes the timer interval and starts the timer.
+                    KSActive = false;
+                    KSODR = true;
+                    KRC.CancelOutputRead();
+                    KRC.Kill();
+                }
+            }
+        }
+
+        // Runs code when the time has passed.
+        private async void KSSyncTimePassed(object sender, EventArgs e)
+        {
+            // Stops the timer.
+            TMKyleServer.Stop();
+
+            // Runs code if condition is met.
+            if (KSODR == true)
+            {
+                // Changes the interval and changes the value of the KSODR variable.
+                TMKyleServer.Interval = 300000;
+                KSODR = false;
+
+                // Runs code if condition is met.
+                if (KSActive == true)
+                {
+                    // Passes a string to the L get set and starts the timer.
+                    L = Environment.NewLine + DateTime.Now.ToString() + " - Info - Checking of Kyle's Server is complete, the server is active.";
+                    TMKyleServer.Start();
+                }
+
+                // Runs code if condition is met.
+                else
+                {
+                    // Passes a string to the L get set and starts the timer.
+                    L = Environment.NewLine + DateTime.Now.ToString() + " - Info - Checking of Kyle's Server is complete, the server is inactive.";
+                    TMKyleServer.Start();
+                }
+            }
+
+            // Runs code if condition is met.
+            else
+            {
+                // Runs code if condition is met.
+                if (TMKyleServer.Interval != 1000)
+                {
+                    // Passes a string to the L get set, calls the KRCServer method and starts the timer.
+                    L = Environment.NewLine + DateTime.Now.ToString() + " - Info - KSSyncTimePassed triggered.";
+                    KRCServer();
+                    TMKyleServer.Start();
+                }
+
+                // Runs code if condition is met.
+                else
+                {
+                    // Starts the timer.
+                    TMKyleServer.Start();
                 }
             }
         }
